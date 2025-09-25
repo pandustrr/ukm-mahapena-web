@@ -27,7 +27,6 @@ class BlogSeeder extends Seeder
             'content' => 'Ini adalah konten blog pertama menggunakan Laravel.',
             'excerpt' => 'Belajar Laravel dasar',
             'category_id' => $category->id,
-            'author_id' => $author->id,
             'status' => 'published',
             'published_at' => now(),
         ]);

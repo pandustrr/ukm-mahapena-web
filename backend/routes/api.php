@@ -4,7 +4,7 @@ use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\MerchandiseController;
 use App\Http\Controllers\Admin\CategoryMerchandiseController;
 use App\Http\Controllers\PublicMerchandiseController;
@@ -19,15 +19,19 @@ use App\Http\Controllers\PublicAlumniController;
 use App\Http\Controllers\Admin\PortofolioController;
 use App\Http\Controllers\PublicPortofolioController;
 
+
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProkerController;
+use App\Http\Controllers\Admin\TagController;
+
 // =====================
 // POST Routes
 // =====================
 Route::apiResource('posts', PostController::class);
 
-// =====================
-// Blog Routes
-// =====================
-Route::apiResource('blogs', BlogController::class);
+
+
+
 Route::get('public/blogs', [BlogController::class, 'indexPublic']);
 Route::get('public/blogs/{slug}', [BlogController::class, 'showPublic']);
 
@@ -82,7 +86,10 @@ Route::prefix('admin')->group(function () {
     Route::delete('alumni/{id}', [AlumniController::class, 'destroy']);
 
     Route::apiResource('portofolio', PortofolioController::class);
-
+    Route::apiResource('blogs', BlogController::class);
+    Route::apiResource('blog-categories', CategoryController::class);
+    Route::apiResource('tags', TagController::class);
+    Route::apiResource('proker', ProkerController::class);
 });
 
 // =====================

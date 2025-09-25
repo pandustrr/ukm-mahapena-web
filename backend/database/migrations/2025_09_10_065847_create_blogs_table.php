@@ -18,7 +18,6 @@ return new class extends Migration
             $table->longText('content');
             $table->text('excerpt')->nullable();
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('author_id');
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->string('featured_image')->nullable();
             $table->string('meta_title')->nullable();
@@ -27,7 +26,6 @@ return new class extends Migration
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
 
-            $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('blog_categories')->onDelete('cascade');
         });
     }

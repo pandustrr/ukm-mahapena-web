@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import {
   Plus,
   Edit,
@@ -16,6 +19,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ManajemenBlog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -23,39 +27,22 @@ const ManajemenBlog = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredBlogs, setFilteredBlogs] = useState([]); // data hasil filter
   const [filterStatus, setFilterStatus] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedBlog, setSelectedBlog] = useState(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const blogsPerPage = 8;
+  const MySwal = withReactContent(Swal);
 
-  // Data dummy untuk simulasi
-  const dummyBlogs = [
-    {
-      id: 1,
-      title: "Panduan Lengkap Web Development untuk Pemula",
-      excerpt:
-        "Belajar dasar-dasar web development dari HTML, CSS, hingga JavaScript...",
-      author: "Ahmad Rizki",
-      category: "Web Development",
-      status: "published",
-      publishedDate: "2024-02-15",
-      views: 1245,
-      likes: 89,
-      comments: 23,
-      image: "/api/placeholder/300/200",
-    },
-  ];
+  // pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const blogsPerPage = 5; // jumlah blog per halaman
 
   useEffect(() => {
-    // Simulasi fetching data dari API
     const fetchBlogs = async () => {
       try {
         setLoading(true);
-        // Di aplikasi nyata, ini akan berupa API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setBlogs(dummyBlogs);
+        const res = await axios.get("http://127.0.0.1:8000/api/admin/blogs");
+        const data = res.data.data?.data || res.data;
+        setBlogs(data);
+        setFilteredBlogs(data);
       } catch (err) {
         setError("Gagal memuat data blog");
       } finally {
@@ -66,44 +53,61 @@ const ManajemenBlog = () => {
     fetchBlogs();
   }, []);
 
-  // Filter blogs berdasarkan search dan status
-  const filteredBlogs = blogs.filter((blog) => {
-    const matchesSearch =
-      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.category.toLowerCase().includes(searchTerm.toLowerCase());
+  // efek filter gabungan
+  useEffect(() => {
+    let results = blogs;
 
-    const matchesStatus =
-      filterStatus === "all" || blog.status === filterStatus;
+    // filter berdasarkan search
+    if (searchTerm !== "") {
+      results = results.filter(
+        (blog) =>
+          blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          blog.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          blog.content?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-    return matchesSearch && matchesStatus;
-  });
+    // filter berdasarkan status
+    if (filterStatus !== "all") {
+      results = results.filter((blog) => blog.status === filterStatus);
+    }
 
-  // Pagination
+    setFilteredBlogs(results);
+  }, [searchTerm, filterStatus, blogs]);
+
+  const handleDelete = async (id) => {
+    MySwal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Anda tidak akan bisa mengembalikan ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, hapus!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`http://localhost:8000/api/admin/blogs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
+            },
+          });
+          MySwal.fire("Dihapus!", "Perubahan tidak disimpan.", "success");
+          // refresh state blog agar list terupdate
+          setBlogs((prev) => prev.filter((blog) => blog.id !== id));
+        } catch (err) {
+          console.error(err);
+          alert("Gagal menghapus blog");
+        }
+      }
+    });
+  };
+
+  // pagination logic
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
   const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
-
-  const handleDelete = (blog) => {
-    setSelectedBlog(blog);
-    setShowDeleteModal(true);
-  };
-
-  const confirmDelete = () => {
-    if (selectedBlog) {
-      setBlogs(blogs.filter((blog) => blog.id !== selectedBlog.id));
-      setSuccess("Blog berhasil dihapus");
-      setShowDeleteModal(false);
-      setSelectedBlog(null);
-      setTimeout(() => setSuccess(""), 3000);
-    }
-  };
-
-  const handleEdit = (blog) => {
-    setSelectedBlog(blog);
-    setShowEditModal(true);
-  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -115,19 +119,6 @@ const ManajemenBlog = () => {
         return "bg-gray-100 text-gray-800";
       default:
         return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case "published":
-        return "Published";
-      case "draft":
-        return "Draft";
-      case "archived":
-        return "Archived";
-      default:
-        return status;
     }
   };
 
@@ -147,10 +138,13 @@ const ManajemenBlog = () => {
           <h1 className="text-2xl font-bold text-gray-800">Manajemen Blog</h1>
           <p className="text-gray-600">Kelola konten blog UKM</p>
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 mt-4 sm:mt-0">
+        <Link
+          to="/admin/blogs/create"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 mt-4 sm:mt-0"
+        >
           <Plus size={18} />
           Tambah Blog
-        </button>
+        </Link>
       </div>
 
       {/* Notifications */}
@@ -168,7 +162,7 @@ const ManajemenBlog = () => {
         </div>
       )}
 
-      {/* Filters and Search */}
+      {/* Bagian Search & Filter */}
       <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
@@ -184,7 +178,6 @@ const ManajemenBlog = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-
           <select
             className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={filterStatus}
@@ -231,10 +224,10 @@ const ManajemenBlog = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Judul Blog
+                  No
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Penulis
+                  Judul Blog
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Kategori
@@ -251,85 +244,73 @@ const ManajemenBlog = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {currentBlogs.map((blog) => (
-                <tr key={blog.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center">
-                      <div className="h-10 w-10 flex-shrink-0 bg-gray-200 rounded-lg overflow-hidden">
-                        <img
-                          className="h-10 w-10 object-cover"
-                          src={blog.image}
-                          alt={blog.title}
-                        />
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900 line-clamp-1">
-                          {blog.title}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {blog.views} views • {blog.likes} likes
-                        </div>
-                      </div>
-                    </div>
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className="text-center py-4">
+                    Memuat data...
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900">{blog.author}</div>
+                </tr>
+              ) : error ? (
+                <tr>
+                  <td colSpan="6" className="text-center py-4 text-red-500">
+                    {error}
                   </td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      <Tag size={12} className="mr-1" />
-                      {blog.category}
-                    </span>
+                </tr>
+              ) : blogs.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="text-center py-4 text-gray-500">
+                    Belum ada blog
                   </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
+                </tr>
+              ) : filteredBlogs.length > 0 ? (
+                filteredBlogs.map((blog, index) => (
+                  <tr key={blog.id} className="border-t">
+                    <td className="px-6 py-4">{index + 1}</td>
+                    <td className="px-6 py-4">{blog.title}</td>
+                    <td className="px-6 py-4">{blog.category?.name || "-"}</td>
+                    <td
+                      className={`px-6 py-4 capitalize ${getStatusColor(
                         blog.status
                       )}`}
                     >
-                      {getStatusText(blog.status)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-500 flex items-center">
-                      <Calendar size={14} className="mr-1" />
-                      {new Date(blog.publishedDate).toLocaleDateString("id-ID")}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center space-x-2">
+                      {blog.status}
+                    </td>
+                    <td className="px-6 py-4">
+                      {new Date(blog.created_at).toLocaleDateString("id-ID", {
+                        day: "2-digit",
+                        month: "long", // <-- otomatis jadi nama bulan
+                        year: "numeric",
+                      })}
+                    </td>
+                    <td className="px-6 py-4 flex gap-2">
+                      <Link
+                        to={`/admin/blogs/update/${blog.id}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        <Edit size={18} />
+                      </Link>
                       <button
-                        onClick={() => handleEdit(blog)}
-                        className="text-blue-600 hover:text-blue-800 p-1"
-                        title="Edit"
+                        onClick={() => handleDelete(blog.id)}
+                        className="text-red-600 hover:underline"
                       >
-                        <Edit size={16} />
+                        <Trash2 size={18} />
                       </button>
-                      <button
-                        onClick={() => handleDelete(blog)}
-                        className="text-red-600 hover:text-red-800 p-1"
-                        title="Delete"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                      <a
-                        href={`/blog/${blog.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-green-600 hover:text-green-800 p-1"
-                        title="View"
-                      >
-                        <Eye size={16} />
-                      </a>
-                    </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center py-4 text-gray-500">
+                    Tidak ada blog yang ditemukan.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
 
-        {currentBlogs.length === 0 && (
+        {/* Pesan jika blog tidak ditemukan */}
+        {/* {currentBlogs.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-2">
               Tidak ada blog yang ditemukan
@@ -338,7 +319,7 @@ const ManajemenBlog = () => {
               Coba ubah filter atau kata kunci pencarian
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Pagination */}
         {totalPages > 1 && (
@@ -390,43 +371,6 @@ const ManajemenBlog = () => {
           </div>
         )}
       </div>
-
-      {/* Delete Confirmation Modal */}
-      {showDeleteModal && selectedBlog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-red-100 rounded-full">
-                <XCircle className="h-6 w-6 text-red-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                Hapus Blog
-              </h3>
-            </div>
-
-            <p className="text-gray-600 mb-6">
-              Apakah Anda yakin ingin menghapus blog "
-              <strong>{selectedBlog.title}</strong>"? Tindakan ini tidak dapat
-              dibatalkan.
-            </p>
-
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                Batal
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-              >
-                Hapus
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

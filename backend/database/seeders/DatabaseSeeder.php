@@ -19,6 +19,10 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             TagSeeder::class,
             BlogSeeder::class,
+            PortofolioSeeder::class,
+            MerchandiseSeeder::class,
+            CategoryMerchandiseSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }

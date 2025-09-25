@@ -248,7 +248,7 @@ function SidebarAdmin({ activePage, setActivePage }) {
         </button>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 3px;
         }

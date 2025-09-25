@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
 {
+
     protected $fillable = [
         'title',
         'slug',
         'content',
         'excerpt',
         'category_id',
-        'author_id',
         'status',
         'featured_image',
         'meta_title',
@@ -21,18 +21,15 @@ class Blog extends Model
         'published_at'
     ];
 
-    public function author()
-    {
-        return $this->belongsTo(User::class, 'author_id');
-    }
-
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id',  'id', 'blog_categories'); // foreign key category_id
     }
 
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'blog_tag');
     }
+
+
 }

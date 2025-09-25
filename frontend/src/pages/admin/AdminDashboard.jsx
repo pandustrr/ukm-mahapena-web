@@ -5,6 +5,9 @@ import ManajemenDivisi from "./ManajemenDivisi";
 import ManajemenPengurus from "./ManajemenPengurus";
 import ManajemenPortofolio from "./ManajemenPortofolio";
 import ManajemenAlumni from "./ManajemenAlumni";
+import ManajemenBlog from "./ManajemenBlog";
+import ManajemenProker from "./ManajemenProker";
+
 import {
   Users,
   ShoppingBag,
@@ -353,7 +356,9 @@ function AdminDashboard() {
         {activePage === "merchandise" && <ManajemenMerchandise />}
         {activePage === "portofolio" && <ManajemenPortofolio />}
         {activePage === "alumni" && <ManajemenAlumni />}
-        {activePage === "proker" && (
+        {activePage === "proker" && <ManajemenProker   />}
+        {activePage === "blog" && <ManajemenBlog />}
+        {/* {activePage === "proker" && (
           <div className="bg-white rounded-lg border border-slate-200 p-8 text-center">
             <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
               <FileText size={32} className="text-blue-600" />
@@ -379,7 +384,7 @@ function AdminDashboard() {
               Fitur ini sedang dalam tahap pengembangan. Segera hadir!
             </p>
           </div>
-        )}
+        )} */}
       </main>
     </div>
   );

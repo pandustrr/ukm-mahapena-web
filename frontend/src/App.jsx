@@ -15,10 +15,16 @@ import PortofolioDetail from "./pages/PortofolioDetail";
 import Merchandise from "./pages/Merchandise";
 import Footer from "./components/Footer";
 
+
 // Halaman admin
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-
+import CreateBlog from "./pages/admin/CreateBlog";
+import EditBlog from "./pages/admin/EditBlog";
+import DetailBlog from "./pages/DetailBlog";
+import ManajemenProker from "./pages/admin/ManajemenProker";
+import CreateProker from "./pages/admin/CreateProker";
+import EditProker from "./pages/admin/EditProker";
 function App() {
     const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -50,6 +56,7 @@ function App() {
                         <Route path="/profil" element={<Profil />} />
                         <Route path="/proker" element={<Proker />} />
                         <Route path="/blog" element={<Blog />} />
+                        <Route path="/blog/detail/:id" element={<DetailBlog />} />
                         <Route path="/portofolio" element={<Portofolio />} />
                         <Route path="/portofolio/:id" element={<PortofolioDetail />} />
                         <Route path="/merchandise" element={<Merchandise />} />
@@ -64,12 +71,17 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
+                        <Route path="/admin/proker/create" element={<CreateProker />} />
+                        <Route path="/admin/proker/update/:id" element={<EditProker />} />
+                        <Route path="/admin/blogs/create" element={<CreateBlog />} />
+                        <Route path="/admin/blogs/update/:id" element={<EditBlog />} />
                     </Routes>
                 </main>
 
                 {/* Footer hanya untuk user biasa */}
                 <Routes>
                     <Route path="/admin/*" element={null} />
+                    <Route path="/blog/detail/*" element={null} />
                     <Route path="/*" element={<Footer />} />
                 </Routes>
             </div>
