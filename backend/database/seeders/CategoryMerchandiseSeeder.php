@@ -7,11 +7,18 @@ use App\Models\CategoryMerchandise;
 
 class CategoryMerchandiseSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        CategoryMerchandise::create(['name' => 'Kaos']);
-        CategoryMerchandise::create(['name' => 'Hoodie']);
-        CategoryMerchandise::create(['name' => 'Aksesoris']);
+        $categories = [
+            ['name'=>'Kaos'],
+            ['name'=>'Hoodie'],
+            ['name'=>'Topi'],
+            ['name'=>'Sticker'],
+            ['name'=>'Mug'],
+        ];
+
+        foreach ($categories as $cat) {
+            CategoryMerchandise::create($cat);
+        }
     }
 }
-

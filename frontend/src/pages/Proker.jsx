@@ -1,7 +1,6 @@
-// File: src/pages/Proker.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { CrossIcon, Loader } from "lucide-react";
+import { X, Loader } from "lucide-react";
 
 const Proker = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -10,14 +9,33 @@ const Proker = () => {
     const [selectedProker, setSelectedProker] = useState(null);
 
     useEffect(() => {
+        setIsVisible(true);
+
+        const handleScroll = () => {
+            const elements = document.querySelectorAll(".fade-in, .slide-in-left, .zoom-in");
+            elements.forEach((el) => {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < window.innerHeight - 100) {
+                    el.classList.add("visible");
+                }
+            });
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        handleScroll();
+
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
         const fetchProker = async () => {
             try {
                 setLoading(true);
 
-                const res = await axios.get("http://localhost:8000/api/proker");
-                console.log(res.data);
+                const res = await axios.get("http://localhost:8000/api/public/proker");
+                setProker(res.data); // BUKAN res.data.data
 
-                setProker(res.data || []); // pastikan sesuai struktur API kamu
+                setProker(res.data || []);
             } catch (err) {
                 console.error("Gagal mengambil data proker:", err);
             } finally {
@@ -28,147 +46,244 @@ const Proker = () => {
     }, []);
 
     return (
-        <div className="pt-24 pb-16 bg-white dark:bg-blue-900">
-            {/* Header */}
-            <section className="py-12 bg-gradient-to-r from-[#113F67] to-[#3674B5] dark:from-blue-100 dark:to-blue-300 text-white dark:text-gray-900">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl font-bold mb-4">Program Kerja</h1>
-                    <p className="text-xl">
+        <div className="overflow-hidden">
+            {/* Hero Section */}
+            <section className="pt-28 pb-20 md:pt-36 md:pb-28 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#3674B5] via-[#5682B1] to-[#A1E3F9]"></div>
+                <div className="absolute inset-0 bg-black/20"></div>
+
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{
+                        backgroundImage: `url(https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80)`
+                    }}
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/80 to-[#000000]/60 dark:from-[#000000]/90 dark:to-[#113F67]/70"></div>
+                    <div className="absolute inset-0 bg-noise opacity-10 dark:opacity-20"></div>
+                </div>
+
+                <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1
+                        className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white transform transition-all duration-1000 ${isVisible
+                            ? "translate-y-0 opacity-100"
+                            : "translate-y-10 opacity-0"
+                            }`}
+                    >
+                        Program{" "}
+                        <span className="bg-gradient-to-r from-[#A1E3F9] to-white bg-clip-text text-transparent">
+                            Kerja
+                        </span>
+                    </h1>
+                    <p className="text-lg md:text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
                         Berbagai program unggulan kami untuk pengembangan mahasiswa
                     </p>
                 </div>
             </section>
 
-            {/* Program List */}
+            {/* Program Kerja Section */}
+            <section className="py-16 bg-gradient-to-br from-slate-50 via-white to-blue-50/20 dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 relative overflow-hidden">
+                {/* Background Elements */}
+                <div className="absolute inset-0">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#A1E3F9]/20 to-[#3674B5]/10 rounded-full blur-3xl transform translate-x-1/3 -translate-y-1/3"></div>
+                    <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[#5682B1]/15 to-[#3674B5]/10 rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3"></div>
+                </div>
 
-            <section className="py-16 bg-white dark:bg-blue-900">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Judul Section */}
-                    <div className="text-center mb-12 fade-in">
-                        <h2 className="text-3xl font-bold text-[#3674B5] dark:text-blue-100">
-                            Program Unggulan
-                        </h2>
-                        <div className="w-20 h-1 bg-[#A1E3F9] mx-auto mt-4"></div>
-                    </div>
-
-                    {/* Grid Proker */}
-                    {loading ? (
-                        <div className="flex items-center justify-center h-64">
-                            <Loader className="animate-spin h-8 w-8 text-blue-600" />
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    {/* Program Kerja Kami */}
+                    <div className="space-y-16">
+                        {/* Section Header */}
+                        <div className="text-center slide-in-left">
+                            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent mb-4">
+                                Program Kerja Kami
+                            </h2>
+                            <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
+                            <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
+                                Jelajahi berbagai program unggulan yang dirancang untuk pengembangan mahasiswa
+                            </p>
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {proker.length > 0 ? (
-                                proker.map((item, index) => (
+
+                        {/* Loading State */}
+                        {loading ? (
+                            <div className="flex items-center justify-center h-64">
+                                <div className="text-center">
+                                    <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-[#3674B5] to-[#5682B1] rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                                        <Loader className="animate-spin w-8 h-8 text-white" />
+                                    </div>
+                                    <p className="text-gray-600 dark:text-gray-300">Memuat program kerja...</p>
+                                </div>
+                            </div>
+                        ) : proker.length === 0 ? (
+                            <div className="text-center py-16">
+                                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-[#3674B5] to-[#5682B1] rounded-full flex items-center justify-center shadow-lg">
+                                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </div>
+                                <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Belum Ada Program Kerja</h4>
+                                <p className="text-gray-500 dark:text-gray-400">Program kerja akan segera tersedia</p>
+                            </div>
+                        ) : (
+                            /* Grid program kerja */
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {proker.map((item, index) => (
                                     <div
                                         key={index}
+                                        className="zoom-in group cursor-pointer"
+                                        style={{ transitionDelay: `${index * 100}ms` }}
                                         onClick={() => {
                                             setSelectedProker({
                                                 ...item,
-                                                gambar: item.featured_image, // alias
+                                                gambar: item.featured_image,
                                             });
                                         }}
-                                        className="fade-in bg-white dark:bg-transparent dark:border dark:border-white rounded-xl shadow-md hover:shadow-xl hover:bg-gray-100 dark:hover:bg-gray-500 cursor-pointer transition-all duration-300 overflow-hidden"
                                     >
-                                        {/* Thumbnail jika ada */}
-                                        <img
-                                            src={
-                                                item.featured_image
-                                                    ? `http://localhost:8000/storage/${item.featured_image}`
-                                                    : "https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                                            }
-                                            alt={item.nama}
-                                            className="w-full h-48 object-cover"
-                                        />
-                                        <div className="p-6">
-                                            <h3 className="text-xl font-semibold text-[#3674B5] dark:text-blue-100 mb-3">
-                                                {item.nama}
-                                            </h3>
-                                            <p
-                                                className="text-gray-600 dark:text-gray-100 line-clamp-3"
-                                                dangerouslySetInnerHTML={{ __html: item.deskripsi }}
-                                            />
-                                            <p className="text-sm text-gray-500 dark:text-gray-100 mt-2">
-                                                {new Date(item.tanggal).toLocaleDateString("id-ID", {
-                                                    day: "2-digit",
-                                                    month: "long",
-                                                    year: "numeric",
-                                                })}
-                                            </p>
+                                        <div className="relative bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-500 border border-gray-100 dark:border-slate-700 overflow-hidden group-hover:scale-105 group-hover:-translate-y-2">
+                                            <div className="absolute inset-0 bg-gradient-to-br from-[#3674B5]/5 to-[#A1E3F9]/5 dark:from-[#3674B5]/10 dark:to-[#A1E3F9]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                                            <div className="relative z-10 text-center">
+                                                {/* Program Image/Icon */}
+                                                <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden bg-gradient-to-br from-[#3674B5]/10 to-[#A1E3F9]/10 flex items-center justify-center group-hover:from-[#3674B5]/20 group-hover:to-[#A1E3F9]/20 transition-all duration-300">
+                                                    {item.featured_image ? (
+                                                        <img
+                                                            src={`http://localhost:8000/storage/${item.featured_image}`}
+                                                            alt={item.nama}
+                                                            className="w-full h-full object-cover"
+                                                            onError={(e) => {
+                                                                e.target.style.display = 'none';
+                                                                e.target.nextSibling.style.display = 'flex';
+                                                            }}
+                                                        />
+                                                    ) : null}
+                                                    <div className="w-full h-full hidden items-center justify-center bg-gradient-to-br from-[#3674B5] to-[#5682B1] text-white font-bold text-2xl">
+                                                        {item.nama.charAt(0).toUpperCase()}
+                                                    </div>
+                                                </div>
+
+                                                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3 group-hover:text-[#3674B5] dark:group-hover:text-[#A1E3F9] transition-colors duration-300">
+                                                    {item.nama}
+                                                </h3>
+
+                                                {/* Date Badge */}
+                                                <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#3674B5]/10 to-[#A1E3F9]/10 dark:from-[#3674B5]/20 dark:to-[#A1E3F9]/20 rounded-full border border-[#3674B5]/20 dark:border-[#A1E3F9]/30 mb-3">
+                                                    <span className="text-sm font-semibold text-[#3674B5] dark:text-[#A1E3F9]">
+                                                        {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                            day: "2-digit",
+                                                            month: "short",
+                                                            year: "numeric",
+                                                        })}
+                                                    </span>
+                                                </div>
+
+                                                {/* Description Preview */}
+                                                <div
+                                                    className="text-xs text-gray-500 dark:text-gray-400 mb-3 line-clamp-2"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: item.deskripsi?.replace(/<[^>]+>/g, "").slice(0, 60) + "..." || "Tidak ada deskripsi"
+                                                    }}
+                                                />
+
+                                                <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                                                        Klik untuk detail →
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                ))
-                            ) : (
-                                <p className="text-gray-500 text-center col-span-3">
-                                    Belum ada program kerja.
-                                </p>
-                            )}
-                        </div>
-                    )}
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
+            </section>
 
-                {/* Modal Detail Proker */}
-                {selectedProker && (
-                    <div className="fixed inset-0 bg-[#00000066] backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full relative overflow-y-auto max-h-[90vh] animate-slide-up">
-                            {/* Tombol Close */}
-                            <button
-                                className="absolute top-3 right-5 cursor-pointer text-gray-600 hover:text-gray-900 text-2xl"
-                                onClick={() => setSelectedProker(null)}
-                            >
-                                <CrossIcon size={18} className="rotate-45 inline-block" />
-                            </button>
+            {/* Modal Detail Proker */}
+            {selectedProker && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-2xl shadow-2xl max-w-2xl w-full relative overflow-y-auto max-h-[90vh] border border-gray-200 dark:border-slate-600">
+                        {/* Tombol Close */}
+                        <button
+                            className="absolute top-4 right-4 z-10 p-2 bg-white/80 dark:bg-slate-700/80 backdrop-blur-sm rounded-full hover:bg-gray-100 dark:hover:bg-slate-600 transition-all duration-300 hover:scale-110 shadow-lg"
+                            onClick={() => setSelectedProker(null)}
+                        >
+                            <X size={18} className="text-gray-600 dark:text-gray-300" />
+                        </button>
 
-                            {/* Isi Modal */}
-                            <div className="p-6 mt-8">
+                        {/* Isi Modal */}
+                        <div className="p-6">
+                            {/* Image */}
+                            {selectedProker.gambar ? (
                                 <img
-                                    src={
-                                        selectedProker.gambar
-                                            ? `http://localhost:8000/storage/${selectedProker.gambar}`
-                                            : "https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                                    }
+                                    src={`http://localhost:8000/storage/${selectedProker.gambar}`}
                                     alt={selectedProker.nama}
-                                    className="w-full h-64 object-cover rounded-lg mb-4"
+                                    className="w-full h-64 object-cover rounded-xl mb-6 shadow-lg"
+                                    onError={(e) => {
+                                        e.target.style.display = 'none';
+                                        e.target.nextSibling.style.display = 'flex';
+                                    }}
                                 />
+                            ) : null}
+                            <div className="w-full h-64 hidden items-center justify-center bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-bold text-6xl rounded-xl mb-6 shadow-lg">
+                                {selectedProker.nama.charAt(0).toUpperCase()}
+                            </div>
 
-                                <h2 className="text-2xl font-bold text-[#3674B5] mb-4">
-                                    {selectedProker.nama}
-                                </h2>
+                            {/* Title */}
+                            <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent mb-4">
+                                {selectedProker.nama}
+                            </h2>
 
+                            {/* Date Badge */}
+                            <div className="inline-flex items-center mb-6">
+                                <span className="px-4 py-2 text-sm font-semibold text-[#3674B5] dark:text-[#A1E3F9] bg-[#3674B5]/10 dark:bg-[#A1E3F9]/10 rounded-full border border-[#3674B5]/20 dark:border-[#A1E3F9]/20">
+                                    {new Date(selectedProker.tanggal).toLocaleDateString("id-ID", {
+                                        day: "2-digit",
+                                        month: "long",
+                                        year: "numeric",
+                                    })}
+                                </span>
+                            </div>
+
+                            {/* Description */}
+                            <div className="prose prose-gray dark:prose-invert max-w-none">
                                 <div
-                                    className="text-gray-700 prose max-w-none leading-relaxed mb-4"
+                                    className="text-base text-gray-700 dark:text-gray-300 leading-relaxed"
                                     dangerouslySetInnerHTML={{ __html: selectedProker.deskripsi }}
                                 />
-
-                                <p className="text-sm text-gray-500">
-                                    {new Date(selectedProker.tanggal).toLocaleDateString(
-                                        "id-ID",
-                                        {
-                                            day: "2-digit",
-                                            month: "long",
-                                            year: "numeric",
-                                        }
-                                    )}
-                                </p>
                             </div>
                         </div>
                     </div>
-                )}
-            </section>
+                </div>
+            )}
 
-            <style jsx>{`
-        @keyframes slide-up {
-          from {
-            transform: translateY(100%);
-          }
-          to {
-            transform: translateY(0);
-          }
-        }
-        .animate-slide-up {
-          animation: slide-up 0.4s ease-out;
-        }
-      `}</style>
+            <style>{`
+                .fade-in, .slide-in-left, .zoom-in {
+                    opacity: 0;
+                    transform: translateY(20px);
+                    transition: opacity 0.6s ease, transform 0.6s ease;
+                }
+                .slide-in-left {
+                    transform: translateX(-20px);
+                }
+                .zoom-in {
+                    transform: scale(0.9);
+                }
+                .fade-in.visible, .slide-in-left.visible, .zoom-in.visible {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                .slide-in-left.visible {
+                    transform: translateX(0);
+                }
+                .zoom-in.visible {
+                    transform: scale(1);
+                }
+                .line-clamp-2 {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+            `}</style>
         </div>
     );
 };

@@ -2,37 +2,23 @@
 
 namespace Database\Seeders;
 
-use App\Models\Blog;
-use App\Models\Category;
-use App\Models\Tag;
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
+use App\Models\Blog;
 
 class BlogSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        $author = User::first() ?? User::factory()->create();
-        $category = Category::first() ?? Category::factory()->create();
-        $tags = Tag::pluck('id')->take(3)->toArray();
+        $blogs = [
+            ['title'=>'Tips Produktif', 'slug'=>'tips-produktif', 'content'=>'Konten produktif...', 'excerpt'=>'Tips produktif singkat', 'category_id'=>1, 'status'=>'published'],
+            ['title'=>'Belajar Laravel', 'slug'=>'belajar-laravel', 'content'=>'Konten Laravel...', 'excerpt'=>'Intro Laravel', 'category_id'=>2, 'status'=>'draft'],
+            ['title'=>'React JS Dasar', 'slug'=>'react-js-dasar', 'content'=>'Konten React...', 'excerpt'=>'React dasar', 'category_id'=>3, 'status'=>'published'],
+            ['title'=>'SEO Blog', 'slug'=>'seo-blog', 'content'=>'Konten SEO...', 'excerpt'=>'Tips SEO', 'category_id'=>1, 'status'=>'archived'],
+            ['title'=>'UI/UX Design', 'slug'=>'ui-ux-design', 'content'=>'Konten Design...', 'excerpt'=>'Intro UI/UX', 'category_id'=>2, 'status'=>'published'],
+        ];
 
-        $blog = Blog::create([
-            'title' => 'Hello World in Laravel',
-            'slug' => Str::slug('Hello World in Laravel') . '-' . time(),
-            'content' => 'Ini adalah konten blog pertama menggunakan Laravel.',
-            'excerpt' => 'Belajar Laravel dasar',
-            'category_id' => $category->id,
-            'status' => 'published',
-            'published_at' => now(),
-        ]);
-
-        if (!empty($tags)) {
-            $blog->tags()->sync($tags);
+        foreach ($blogs as $blog) {
+            Blog::create($blog);
         }
     }
 }

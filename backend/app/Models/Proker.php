@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Proker extends Model
 {
     use HasFactory;
+    protected $table = 'prokers'; 
+
 
     protected $fillable = [
         'nama',

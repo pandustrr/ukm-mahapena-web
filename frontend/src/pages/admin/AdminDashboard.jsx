@@ -18,129 +18,33 @@ import {
   Calendar,
   Activity,
   Clock,
-  Eye,
-  MessageSquare,
-  Star,
-  Award,
-  PlusCircle,
   ArrowUpRight,
   BarChart3,
+  PlusCircle
 } from "lucide-react";
 
 // Dashboard Content Component
 function DashboardContent() {
-  // Mock data - dalam implementasi nyata, data ini akan diambil dari API
+  // Mock data - nanti bisa diganti dengan API
   const stats = [
-    {
-      title: "Total Pengurus",
-      value: "24",
-      change: "+2",
-      icon: Users,
-      color: "blue",
-      bgColor: "bg-blue-50",
-      iconColor: "text-blue-600",
-      borderColor: "border-blue-200"
-    },
-    {
-      title: "Total Alumni",
-      value: "156",
-      change: "+12",
-      icon: GraduationCap,
-      color: "emerald",
-      bgColor: "bg-emerald-50",
-      iconColor: "text-emerald-600",
-      borderColor: "border-emerald-200"
-    },
-    {
-      title: "Merchandise Aktif",
-      value: "8",
-      change: "+1",
-      icon: ShoppingBag,
-      color: "purple",
-      bgColor: "bg-purple-50",
-      iconColor: "text-purple-600",
-      borderColor: "border-purple-200"
-    },
-    {
-      title: "Portofolio",
-      value: "32",
-      change: "+5",
-      icon: Briefcase,
-      color: "orange",
-      bgColor: "bg-orange-50",
-      iconColor: "text-orange-600",
-      borderColor: "border-orange-200"
-    }
+    { title: "Total Pengurus", value: "24", change: "+2", icon: Users, color: "blue", bgColor: "bg-blue-50", iconColor: "text-blue-600", borderColor: "border-blue-200" },
+    { title: "Total Alumni", value: "156", change: "+12", icon: GraduationCap, color: "emerald", bgColor: "bg-emerald-50", iconColor: "text-emerald-600", borderColor: "border-emerald-200" },
+    { title: "Merchandise Aktif", value: "8", change: "+1", icon: ShoppingBag, color: "purple", bgColor: "bg-purple-50", iconColor: "text-purple-600", borderColor: "border-purple-200" },
+    { title: "Portofolio", value: "32", change: "+5", icon: Briefcase, color: "orange", bgColor: "bg-orange-50", iconColor: "text-orange-600", borderColor: "border-orange-200" }
   ];
 
   const recentActivities = [
-    {
-      id: 1,
-      action: "Menambahkan pengurus baru",
-      user: "Admin",
-      item: "John Doe - Divisi IT",
-      time: "2 jam yang lalu",
-      type: "create",
-      icon: Users
-    },
-    {
-      id: 2,
-      action: "Memperbarui merchandise",
-      user: "Admin",
-      item: "T-Shirt Organisasi 2024",
-      time: "4 jam yang lalu",
-      type: "update",
-      icon: ShoppingBag
-    },
-    {
-      id: 3,
-      action: "Upload portofolio baru",
-      user: "Admin",
-      item: "Website E-Commerce",
-      time: "1 hari yang lalu",
-      type: "create",
-      icon: Briefcase
-    },
-    {
-      id: 4,
-      action: "Menambahkan alumni",
-      user: "Admin",
-      item: "Sarah Wilson - Angkatan 2022",
-      time: "2 hari yang lalu",
-      type: "create",
-      icon: GraduationCap
-    }
+    { id: 1, action: "Menambahkan pengurus baru", user: "Admin", item: "John Doe - Divisi IT", time: "2 jam yang lalu", icon: Users },
+    { id: 2, action: "Memperbarui merchandise", user: "Admin", item: "T-Shirt Organisasi 2024", time: "4 jam yang lalu", icon: ShoppingBag },
+    { id: 3, action: "Upload portofolio baru", user: "Admin", item: "Website E-Commerce", time: "1 hari yang lalu", icon: Briefcase },
+    { id: 4, action: "Menambahkan alumni", user: "Admin", item: "Sarah Wilson - Angkatan 2022", time: "2 hari yang lalu", icon: GraduationCap }
   ];
 
   const quickActions = [
-    {
-      title: "Tambah Pengurus",
-      description: "Daftarkan pengurus baru",
-      icon: Users,
-      action: "pengurus",
-      color: "blue"
-    },
-    {
-      title: "Tambah Merchandise",
-      description: "Upload produk baru",
-      icon: ShoppingBag,
-      action: "merchandise", 
-      color: "purple"
-    },
-    {
-      title: "Tambah Portofolio",
-      description: "Showcase project terbaru",
-      icon: Briefcase,
-      action: "portofolio",
-      color: "orange"
-    },
-    {
-      title: "Tambah Alumni",
-      description: "Daftarkan alumni baru",
-      icon: GraduationCap,
-      action: "alumni",
-      color: "emerald"
-    }
+    { title: "Tambah Pengurus", description: "Daftarkan pengurus baru", icon: Users, action: "pengurus", color: "blue" },
+    { title: "Tambah Merchandise", description: "Upload produk baru", icon: ShoppingBag, action: "merchandise", color: "purple" },
+    { title: "Tambah Portofolio", description: "Showcase project terbaru", icon: Briefcase, action: "portofolio", color: "orange" },
+    { title: "Tambah Alumni", description: "Daftarkan alumni baru", icon: GraduationCap, action: "alumni", color: "emerald" }
   ];
 
   return (
@@ -168,9 +72,7 @@ function DashboardContent() {
                 <p className="text-sm font-medium text-slate-600">{stat.title}</p>
                 <div className="flex items-center gap-2 mt-1">
                   <p className="text-2xl font-bold text-slate-800">{stat.value}</p>
-                  <span className="text-xs font-medium text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">
-                    {stat.change}
-                  </span>
+                  <span className="text-xs font-medium text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">{stat.change}</span>
                 </div>
               </div>
               <div className={`${stat.iconColor} p-2 rounded-lg bg-white/60`}>
@@ -195,7 +97,6 @@ function DashboardContent() {
                 Lihat Semua
               </button>
             </div>
-            
             <div className="space-y-4">
               {recentActivities.map((activity) => (
                 <div key={activity.id} className="flex items-start gap-3 p-3 hover:bg-slate-50 rounded-lg transition-colors">
@@ -203,15 +104,9 @@ function DashboardContent() {
                     <activity.icon size={16} className="text-blue-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-800">
-                      {activity.action}
-                    </p>
-                    <p className="text-sm text-slate-600 truncate">
-                      {activity.item}
-                    </p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      {activity.time}
-                    </p>
+                    <p className="text-sm font-medium text-slate-800">{activity.action}</p>
+                    <p className="text-sm text-slate-600 truncate">{activity.item}</p>
+                    <p className="text-xs text-slate-500 mt-1">{activity.time}</p>
                   </div>
                   <div className="text-xs text-slate-400">
                     <ArrowUpRight size={16} />
@@ -229,7 +124,6 @@ function DashboardContent() {
               <PlusCircle size={20} className="text-emerald-600" />
               Aksi Cepat
             </h2>
-            
             <div className="space-y-3">
               {quickActions.map((action, index) => (
                 <button
@@ -241,12 +135,8 @@ function DashboardContent() {
                       <action.icon size={16} />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-slate-800">
-                        {action.title}
-                      </p>
-                      <p className="text-xs text-slate-600">
-                        {action.description}
-                      </p>
+                      <p className="text-sm font-medium text-slate-800">{action.title}</p>
+                      <p className="text-xs text-slate-600">{action.description}</p>
                     </div>
                     <ArrowUpRight size={16} className="text-slate-400 group-hover:text-slate-600" />
                   </div>
@@ -256,89 +146,11 @@ function DashboardContent() {
           </div>
         </div>
       </div>
-
-      {/* Performance Overview */}
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* System Status */}
-        <div className="bg-white rounded-lg border border-slate-200 p-6">
-          <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-            <BarChart3 size={20} className="text-purple-600" />
-            Status Sistem
-          </h2>
-          
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-lg border border-emerald-200">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                <span className="text-sm font-medium text-slate-700">Server Status</span>
-              </div>
-              <span className="text-sm text-emerald-600 font-medium">Online</span>
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="text-sm font-medium text-slate-700">Database</span>
-              </div>
-              <span className="text-sm text-blue-600 font-medium">Terhubung</span>
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                <span className="text-sm font-medium text-slate-700">Backup</span>
-              </div>
-              <span className="text-sm text-yellow-600 font-medium">Terjadwal</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Summary */}
-        <div className="bg-white rounded-lg border border-slate-200 p-6">
-          <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-            <TrendingUp size={20} className="text-indigo-600" />
-            Ringkasan Bulan Ini
-          </h2>
-          
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600">Pengurus Baru</span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-slate-800">3 orang</span>
-                <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">+50%</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600">Alumni Terdaftar</span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-slate-800">8 orang</span>
-                <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">+12%</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600">Portofolio Upload</span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-slate-800">5 project</span>
-                <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">+25%</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600">Merchandise Baru</span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-slate-800">2 item</span>
-                <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded-full">+100%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
 
+// Main Admin Dashboard
 function AdminDashboard() {
   const [activePage, setActivePage] = useState("dashboard");
 
@@ -350,41 +162,13 @@ function AdminDashboard() {
 
       <main className="flex-1 p-6">
         {activePage === "dashboard" && <DashboardContent />}
-
         {activePage === "divisi" && <ManajemenDivisi />}
         {activePage === "pengurus" && <ManajemenPengurus />}
         {activePage === "merchandise" && <ManajemenMerchandise />}
         {activePage === "portofolio" && <ManajemenPortofolio />}
         {activePage === "alumni" && <ManajemenAlumni />}
-        {activePage === "proker" && <ManajemenProker   />}
+        {activePage === "proker" && <ManajemenProker />}
         {activePage === "blog" && <ManajemenBlog />}
-        {/* {activePage === "proker" && (
-          <div className="bg-white rounded-lg border border-slate-200 p-8 text-center">
-            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FileText size={32} className="text-blue-600" />
-            </div>
-            <h1 className="text-2xl font-bold text-slate-800 mb-2">
-              Manajemen Program Kerja
-            </h1>
-            <p className="text-slate-600">
-              Fitur ini sedang dalam tahap pengembangan. Segera hadir!
-            </p>
-          </div>
-        )}
-
-        {activePage === "blog" && (
-          <div className="bg-white rounded-lg border border-slate-200 p-8 text-center">
-            <div className="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FileText size={32} className="text-orange-600" />
-            </div>
-            <h1 className="text-2xl font-bold text-slate-800 mb-2">
-              Manajemen Blog
-            </h1>
-            <p className="text-slate-600">
-              Fitur ini sedang dalam tahap pengembangan. Segera hadir!
-            </p>
-          </div>
-        )} */}
       </main>
     </div>
   );

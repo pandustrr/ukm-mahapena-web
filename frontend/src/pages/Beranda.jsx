@@ -1,50 +1,19 @@
-// File: src/pages/Beranda.jsx
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import { Calendar, Clock, ArrowRight, Users, Trophy, Heart, Loader } from "lucide-react";
 
 const Beranda = ({ setCurrentPage }) => {
-    // Terima prop setCurrentPage
     const [isVisible, setIsVisible] = useState(false);
     const [loading, setLoading] = useState(true);
     const [articles, setArticles] = useState([]);
     const [proker, setProker] = useState([]);
 
     useEffect(() => {
-        AOS.init({
-            duration: 1000, // durasi animasi
-            once: true, // animasi hanya sekali
-        });
-    }, []);
-
-    useEffect(() => {
-        const fetchProker = async () => {
-            try {
-                setLoading(true);
-
-                const res = await axios.get("http://localhost:8000/api/proker");
-                console.log(res.data);
-                // console.log("Isi proker state:", res.data);
-                // console.log("Apakah array?", Array.isArray(res.data));
-
-                setProker(res.data); // pastikan sesuai struktur API kamu
-            } catch (err) {
-                console.error("Gagal mengambil data proker:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProker();
-    }, []);
-
-    useEffect(() => {
         setIsVisible(true);
 
         const handleScroll = () => {
-            const elements = document.querySelectorAll(".fade-in");
+            const elements = document.querySelectorAll(".fade-in, .slide-in-left, .zoom-in");
             elements.forEach((el) => {
                 const elementTop = el.getBoundingClientRect().top;
                 if (elementTop < window.innerHeight - 100) {
@@ -60,28 +29,38 @@ const Beranda = ({ setCurrentPage }) => {
     }, []);
 
     useEffect(() => {
+        const fetchProker = async () => {
+            try {
+                setLoading(true);
+                const res = await axios.get("http://localhost:8000/api/public/proker");
+                console.log(res.data);
+                setProker(res.data);
+            } catch (err) {
+                console.error("Gagal mengambil data proker:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProker();
+    }, []);
+
+    useEffect(() => {
         const fetchBlogs = async () => {
             try {
                 setLoading(true);
 
                 const res = await axios.get("http://localhost:8000/api/blogs");
-                // asumsi API kamu return { data: [...] }
-
                 const payload = res.data;
                 let list = [];
 
-                // beberapa kemungkinan struktur response:
                 if (Array.isArray(payload)) {
-                    // API mengembalikan array langsung
                     list = payload;
                 } else if (Array.isArray(payload.data)) {
-                    // { data: [...] }
                     list = payload.data;
                 } else if (payload.data && Array.isArray(payload.data.data)) {
-                    // { data: { current_page:..., data: [...] } } (laravel paginate)
                     list = payload.data.data;
                 } else {
-                    // fallback: ambil property pertama yang berupa array (jika ada)
                     const maybeArray = Object.values(payload).find((v) =>
                         Array.isArray(v)
                     );
@@ -102,7 +81,7 @@ const Beranda = ({ setCurrentPage }) => {
 
     const getUpcomingProker = (proker) => {
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // reset jam
+        today.setHours(0, 0, 0, 0);
 
         return proker.filter((item) => {
             const prokerDate = new Date(item.tanggal);
@@ -112,9 +91,9 @@ const Beranda = ({ setCurrentPage }) => {
     };
 
     return (
-        <div className="">
+        <div className="overflow-hidden bg-white dark:bg-slate-900 scroll-smooth">
             {/* Hero Section */}
-            <section className="pt-28 pb-20 h-[40rem] flex justify-center items-center md:pt-36 md:pb-28 relative text-white dark:text-[#A1E3F9] overflow-hidden">
+            <section className="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden">
                 {/* Background Image */}
                 <div
                     className="absolute inset-0 bg-cover bg-center"
@@ -128,19 +107,18 @@ const Beranda = ({ setCurrentPage }) => {
 
                 <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
                     <h1
-                        className={`text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight transform transition-all duration-1000 ${isVisible
+                        className={`text-3xl md:text-4xl lg:text-6xl font-bold mb-6 text-white transform transition-all duration-1000 ${isVisible
                                 ? "translate-y-0 opacity-100"
                                 : "translate-y-10 opacity-0"
                             }`}
                     >
                         Selamat Datang di{" "}
-                        <span className="bg-gradient-to-r from-[#A1E3F9] via-white to-[#A1E3F9] bg-clip-text text-transparent dark:from-[#3674B5] dark:to-[#5682B1]">
+                        <span className="bg-gradient-to-r from-[#A1E3F9] to-[#FFFFFF] bg-clip-text text-transparent">
                             UKM MAHAPENA
                         </span>
                     </h1>
-                    <p className="text-lg md:text-xl text-gray-200 dark:text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
-                        Wadah pengembangan kreativitas dan inovasi mahasiswa untuk
-                        mengeksplorasi potensi diri.
+                    <p className="text-lg md:text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
+                        Wadah pengembangan kreativitas dan inovasi mahasiswa untuk mengeksplorasi potensi diri.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
                         <button
@@ -148,274 +126,381 @@ const Beranda = ({ setCurrentPage }) => {
                                 setCurrentPage("Profil"); // Pindah ke halaman Profil
                                 window.scrollTo(0, 0); // Scroll ke atas
                             }}
-                            className="bg-transparent hover:bg-white/10 dark:hover:bg-[#3674B5]/20 text-white dark:text-[#A1E3F9] font-semibold py-3 px-8 rounded-lg border border-white dark:border-[#A1E3F9] transition-all duration-300 hover:scale-105"
-                        >
+                            className="group relative overflow-hidden px-8 py-3 rounded-xl font-semibold
+                                    transition-all duration-300 flex items-center justify-center gap-2
+                                    backdrop-blur-sm
+
+                                    /* Light mode */
+                                    bg-white/10 text-white border border-white/50
+                                    hover:bg-[#3674B5]/90 hover:text-white hover:border-[#3674B5]
+
+                                    /* Dark mode */
+                                    dark:bg-white/5 dark:text-[#A1E3F9] dark:border-[#A1E3F9]/50
+                                    dark:hover:bg-[#3674B5]/80 dark:hover:text-white"
+                                                >
+                                    {/* Efek shine */}
+                                                    <span className="absolute inset-0 -translate-x-full 
+                                            bg-gradient-to-r from-transparent via-white/20 to-transparent
+                                            transition-transform duration-500 group-hover:translate-x-full"></span>
                             Profil
                         </button>
                     </div>
-                </div>
 
-                {/* Wave Divider */}
-                <div className="absolute bottom-0 left-0 right-0 overflow-hidden">
+                </div>
+                {/* Smooth Wave Transition */}
+                <div className="absolute bottom-0 left-0 right-0">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 1440 320"
+                        viewBox="0 0 1440 120"
                         preserveAspectRatio="none"
-                        className="w-full h-20 text-white dark:text-blue-900 fill-current "
+                        className="w-full h-16 fill-slate-50 dark:fill-slate-800"
                     >
-                        <path d="M0,64L80,106.7C160,149,320,235,480,234.7C640,235,800,149,960,128C1120,107,1280,149,1360,170.7L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+                        <path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
                     </svg>
                 </div>
             </section>
 
             {/* Program Unggulan */}
-            <section
-                className="py-16 h-[35rem] bg-white dark:bg-blue-900"
-                data-aos="fade-up"
-            >
-                <div className="max-w-6xl mx-auto px-6">
-                    <h2 className="text-3xl font-bold text-center mb-12 dark:text-white">
-                        Program Unggulan
-                    </h2>
+            <section className="relative py-16 bg-slate-50 dark:bg-slate-800">
+                {/* Subtle Background Elements */}
+                <div className="absolute inset-0 opacity-40">
+                    <div className="absolute top-20 right-10 w-72 h-72 bg-gradient-to-bl from-[#A1E3F9]/20 to-[#3674B5]/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-20 left-10 w-64 h-64 bg-gradient-to-tr from-[#5682B1]/15 to-[#3674B5]/10 rounded-full blur-3xl"></div>
+                </div>
+
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center mb-16 opacity-0 -translate-x-5 transition-all duration-700 [&.visible]:opacity-100 [&.visible]:translate-x-0 slide-in-left">
+                        <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">
+                            Program Unggulan
+                        </h2>
+                        <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
+                        <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
+                            Berbagai program inovatif untuk mengembangkan potensi dan kreativitas mahasiswa
+                        </p>
+                    </div>
+
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
                             {
                                 title: "Pelatihan Rutin",
                                 desc: "Mengasah skill mahasiswa dalam bidang kreativitas dan inovasi.",
-                                icon: "🎓",
+                                icon: <Users className="w-8 h-8 text-[#3674B5]" />,
+                                gradient: "from-[#3674B5] to-[#5682B1]"
                             },
                             {
                                 title: "Kompetisi",
                                 desc: "Ajang kompetisi untuk menguji kemampuan dan kreativitas mahasiswa.",
-                                icon: "🏆",
+                                icon: <Trophy className="w-8 h-8 text-[#5682B1]" />,
+                                gradient: "from-[#5682B1] to-[#A1E3F9]"
                             },
                             {
                                 title: "Pengabdian",
                                 desc: "Menerapkan ilmu untuk memberi dampak positif kepada masyarakat.",
-                                icon: "🤝",
-                            },
+                                icon: <Heart className="w-8 h-8 text-[#A1E3F9]" />,
+                                gradient: "from-[#A1E3F9] to-[#3674B5]"
+                            }
                         ].map((item, i) => (
                             <div
                                 key={i}
-                                className="p-6 border dark:border-white rounded-2xl shadow hover:shadow-lg transition"
+                                className="opacity-0 scale-90 transition-all duration-500 [&.visible]:opacity-100 [&.visible]:scale-100 zoom-in group bg-white dark:bg-slate-700 rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:scale-105 hover:-translate-y-2 relative overflow-hidden border border-slate-200/50 dark:border-slate-600/50"
+                                style={{ transitionDelay: `${i * 100}ms` }}
                             >
-                                <div className="text-4xl mb-4">{item.icon}</div>
-                                <h3 className="text-xl font-semibold mb-2  dark:text-white">
-                                    {item.title}
-                                </h3>
-                                <p className="text-gray-600 dark:text-gray-200">{item.desc}</p>
+                                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-5 transition-all duration-500`}></div>
+
+                                <div className="relative z-10 text-center">
+                                    <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-600 dark:to-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md">
+                                        {item.icon}
+                                    </div>
+                                    <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-4 group-hover:text-[#3674B5] dark:group-hover:text-[#A1E3F9] transition-colors">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                                        {item.desc}
+                                    </p>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
+
+                {/* Bottom Wave Transition */}
+                <div className="absolute bottom-0 left-0 right-0">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 1440 80"
+                        preserveAspectRatio="none"
+                        className="w-full h-12 fill-white dark:fill-slate-900"
+                    >
+                        <path d="M0,40L80,42.7C160,45,320,51,480,48C640,45,800,33,960,32C1120,31,1280,41,1360,45.3L1440,48L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z"></path>
+                    </svg>
+                </div>
             </section>
 
-            {/* Upcoming Events */}
-            <section className="relative h-[50rem] flex justify-center items-center bg-[#3674B5]">
-                {/* Wave atas */}
-                <div className="z-20 absolute overflow-hidden top-0 left-0 right-0 leading-none transform -translate-y-20">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 1440 320"
-                        preserveAspectRatio="none"
-                        className="w-full h-20 text-[#3674B5] fill-current "
-                    >
-                        <path d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,154.7C672,160,768,192,864,192C960,192,1056,160,1152,154.7C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                    </svg>
-                </div>
-                <div className="z-10 absolute overflow-hidden top-0 left-0 right-0 leading-none transform -translate-y-32">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 1440 320"
-                        preserveAspectRatio="none"
-                        className="w-full h-32 text-[#3673b59f] fill-current"
-                    >
-                        <path d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,154.7C672,160,768,192,864,192C960,192,1056,160,1152,154.7C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                    </svg>
-                </div>
-
-                {/* Content */}
-                <div
-                    className="py-16 max-w-6xl mx-auto px-6 relative z-10 flex justify-center items-center flex-col"
-                    data-aos="fade-up"
-                >
-                    <h2 className="text-3xl font-bold text-center text-white mb-12">
-                        Agenda Mendatang
-                    </h2>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {proker.length > 0 ? (
-                            getUpcomingProker(proker)
-                                .slice(0, 3)
-                                .map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className="p-6 bg-white dark:bg-transparent border dark:border-white rounded-lg shadow"
-                                    >
-                                        <h3 className="text-xl font-semibold mb-2 dark:text-white">
-                                            {item.nama}
-                                        </h3>
-                                        <p className="text-gray-600 dark:text-gray-200 mb-3 line-clamp-2">
-                                            {item.deskripsi}
-                                        </p>
-                                        <p className="text-sm text-gray-500 dark:text-gray-200">
-                                            {new Date(item.tanggal).toLocaleDateString("id-ID", {
-                                                day: "2-digit",
-                                                month: "long",
-                                                year: "numeric",
-                                            })}
-                                        </p>
-                                    </div>
-                                ))
-                        ) : (
-                            <p>Belum ada data proker</p>
-                        )}
+            {/* Agenda Mendatang */}
+            <section className="py-16 bg-white dark:bg-slate-900">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16 opacity-0 -translate-x-5 transition-all duration-700 [&.visible]:opacity-100 [&.visible]:translate-x-0 slide-in-left">
+                        <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">
+                            Agenda Mendatang
+                        </h2>
+                        <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
+                        <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
+                            Program kerja terbaru yang akan segera dilaksanakan
+                        </p>
                     </div>
-                    <Link
-                        to="/blog"
-                        className="mt-9 px-6 py-3 bg-blue-100 text-blue-600 dark:bg-blue-600 dark:text-white font-semibold rounded-lg shadow-xl hover:bg-blue-900 transition inline-block"
-                    >
-                        Lihat Program Lainnya..
-                    </Link>
+
+                    {loading ? (
+                        <div className="flex items-center justify-center h-32">
+                            <Loader className="animate-spin h-8 w-8 text-[#3674B5] animate-pulse" />
+                        </div>
+                    ) : (
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {proker.length > 0 ? (
+                                getUpcomingProker(proker)
+                                    .slice(0, 3)
+                                    .map((item, index) => (
+                                        <article
+                                            key={index}
+                                            className="opacity-0 scale-90 transition-all duration-500 [&.visible]:opacity-100 [&.visible]:scale-100 zoom-in bg-white dark:bg-slate-800 rounded-xl shadow-lg hover:shadow-2xl overflow-hidden border border-slate-200/50 dark:border-slate-700/50 group hover:scale-105 hover:-translate-y-1"
+                                            style={{ transitionDelay: `${index * 100}ms` }}
+                                        >
+                                            <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#3674B5]/10 to-[#A1E3F9]/20">
+                                                {item.featured_image ? (
+                                                    <img
+                                                        src={`http://localhost:8000/storage/${item.featured_image}`}
+                                                        alt={item.nama}
+                                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#3674B5] to-[#5682B1] text-white">
+                                                        <Calendar className="w-12 h-12" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="p-6">
+                                                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-3 group-hover:text-[#3674B5] dark:group-hover:text-[#A1E3F9] transition-colors">
+                                                    {item.nama}
+                                                </h3>
+
+                                                <div
+                                                    className="text-slate-600 dark:text-slate-300 mb-4 line-clamp-2 text-sm leading-relaxed"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: item.deskripsi?.replace(/<[^>]+>/g, "").slice(0, 80) + "..." || "Tidak ada deskripsi"
+                                                    }}
+                                                />
+
+                                                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                                                    <Calendar className="w-4 h-4" />
+                                                    <span>
+                                                        {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                                                            day: "2-digit",
+                                                            month: "long",
+                                                            year: "numeric",
+                                                        })}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    ))
+                            ) : (
+                                <div className="col-span-full text-center py-12">
+                                    <Calendar className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+                                    <p className="text-slate-500 dark:text-slate-400">Belum ada agenda mendatang</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    <div className="text-center mt-12">
+                        <Link
+                            to="/proker"
+                            className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-semibold rounded-xl hover:from-[#5682B1] hover:to-[#A1E3F9] transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        >
+                            <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full"></span>
+                            Lihat Program Lainnya
+                            <ArrowRight size={16} />
+                        </Link>
+                    </div>
                 </div>
 
-                {/* Wave bawah */}
-                <div className="absolute bottom-0 left-0 right-0 transform translate-y-16">
+                {/* Top Wave Transition */}
+                <div className="absolute bottom-0 left-0 right-0">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 1440 320"
+                        viewBox="0 0 1440 80"
                         preserveAspectRatio="none"
-                        className="w-full h-20 text-[#3674B5] fill-current"
+                        className="w-full h-12 fill-slate-50 dark:fill-slate-800"
                     >
-                        <path d="M0,64L48,74.7C96,85,192,107,288,133.3C384,160,480,192,576,181.3C672,171,768,117,864,117.3C960,117,1056,171,1152,197.3C1248,224,1344,224,1392,224L1440,224L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
-                    </svg>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 transform translate-y-24">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 1440 320"
-                        preserveAspectRatio="none"
-                        className="w-full h-24 text-[#3673b59f] fill-current"
-                    >
-                        <path d="M0,64L48,74.7C96,85,192,107,288,133.3C384,160,480,192,576,181.3C672,171,768,117,864,117.3C960,117,1056,171,1152,197.3C1248,224,1344,224,1392,224L1440,224L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+                        <path d="M0,0L80,8C160,16,320,32,480,37.3C640,43,800,37,960,32C1120,27,1280,21,1360,18.7L1440,16L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z"></path>
                     </svg>
                 </div>
             </section>
 
             {/* Berita Terbaru */}
-            <section className="pt-16 bg-white dark:dark:bg-blue-900 h-[50rem] flex items-center justify-center">
-                <div
-                    className="max-w-6xl mx-auto px-6 flex items-center justify-center flex-col"
-                    data-aos="fade-up"
-                >
-                    <h2 className="text-3xl font-bold text-center mb-12 dark:text-white">
-                        Berita Terbaru
-                    </h2>
+            <section className="relative py-16 bg-slate-50 dark:bg-slate-800">
+                {/* Background Elements */}
+                <div className="absolute inset-0 opacity-30">
+                    <div className="absolute top-20 left-10 w-80 h-80 bg-gradient-to-br from-[#A1E3F9]/20 to-[#3674B5]/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-tl from-[#5682B1]/15 to-[#3674B5]/10 rounded-full blur-3xl"></div>
+                </div>
+
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center mb-16 opacity-0 -translate-x-5 transition-all duration-700 [&.visible]:opacity-100 [&.visible]:translate-x-0 slide-in-left">
+                        <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">
+                            Berita Terbaru
+                        </h2>
+                        <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
+                        <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
+                            Artikel dan informasi terkini seputar kegiatan UKM Mahapena
+                        </p>
+                    </div>
+
                     <div className="grid md:grid-cols-3 gap-8">
                         {articles.slice(0, 3).map((article, index) => (
-                            <div
+                            <article
                                 key={index}
-                                className="bg-gray-50 dark:bg-transparent dark:border dark:border-white rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+                                className="opacity-0 scale-90 transition-all duration-500 [&.visible]:opacity-100 [&.visible]:scale-100 zoom-in bg-white dark:bg-slate-700 rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden border border-slate-200/50 dark:border-slate-600/50 group hover:scale-105 hover:-translate-y-2"
+                                style={{ transitionDelay: `${index * 100}ms` }}
                             >
-                                <img
-                                    src={
-                                        article.featured_image
-                                            ? `http://localhost:8000/storage/${article.featured_image}`
-                                            : "https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                                    }
-                                    alt={article.title}
-                                    className="w-full h-48 object-cover"
-                                />
-                                <div className="p-4">
-                                    <h3 className="text-lg dark:text-white font-semibold mb-2">
+                                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#3674B5]/10 to-[#A1E3F9]/20">
+                                    {article.featured_image ? (
+                                        <img
+                                            src={`http://localhost:8000/storage/${article.featured_image}`}
+                                            alt={article.title}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#3674B5] to-[#5682B1] text-white">
+                                            <div className="text-center">
+                                                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="p-6">
+                                    <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-3 line-clamp-2 group-hover:text-[#3674B5] dark:group-hover:text-[#A1E3F9] transition-colors">
                                         {article.title}
                                     </h3>
-                                    <p className="text-gray-600 dark:text-white text-sm mb-3">
+
+                                    <p className="text-slate-600 dark:text-slate-300 mb-4 line-clamp-2 text-sm leading-relaxed">
                                         {article.content.replace(/<[^>]+>/g, "").slice(0, 100)}...
                                     </p>
+
                                     <Link
-                                        to={`/blog/${article}`}
-                                        className="text-blue-600 dark:text-blue-100 hover:underline text-sm font-medium "
+                                        to={`/blog/detail/${article.id}`}
+                                        className="inline-flex items-center gap-2 text-[#3674B5] dark:text-[#A1E3F9] font-medium text-sm hover:gap-3 transition-all duration-300 group/link"
                                     >
-                                        Baca selengkapnya →
+                                        Baca Selengkapnya
+                                        <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
                                     </Link>
                                 </div>
-                            </div>
+                            </article>
                         ))}
                     </div>
-                    <Link
-                        to="/blog"
-                        className="mt-9 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-xl hover:bg-blue-900 transition inline-block"
+
+                    <div className="text-center mt-12">
+                        <Link
+                            to="/blog"
+                            className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-semibold rounded-xl hover:from-[#5682B1] hover:to-[#A1E3F9] transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        >
+                            <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full"></span>
+                            Lihat Blog Lainnya
+                            <ArrowRight size={16} />
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Bottom Wave Transition */}
+                <div className="absolute bottom-0 left-0 right-0">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 1440 80"
+                        preserveAspectRatio="none"
+                        className="w-full h-12 fill-white dark:fill-slate-900"
                     >
-                        Lihat Blog Lainnya..
-                    </Link>
+                        <path d="M0,40L80,42.7C160,45,320,51,480,48C640,45,800,33,960,32C1120,31,1280,41,1360,45.3L1440,48L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z"></path>
+                    </svg>
                 </div>
             </section>
 
-            {/* CTA Join */}
-            <section className="py-20 bg-[#3674B5] text-white text-center">
-                <div className="" data-aos="fade-up">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Hubungi Kami!</h2>
-                    <p className="max-w-2xl mx-auto mb-8 text-lg text-blue-100">
-                        Mari kembangkan kreativitas, inovasi, dan jejaring bersama kami
-                        untuk masa depan yang lebih baik.
-                    </p>
+            {/* CTA Contact Section */}
+            <section className="py-16 bg-white dark:bg-slate-900">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-12 opacity-0 -translate-x-5 transition-all duration-700 [&.visible]:opacity-100 [&.visible]:translate-x-0 slide-in-left">
+                        <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">
+                            Hubungi Kami!
+                        </h2>
+                        <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
+                            Mari kembangkan kreativitas, inovasi, dan jejaring bersama kami untuk masa depan yang lebih baik.
+                        </p>
+                    </div>
 
-                    {/* Wrapper Form */}
-                    <div className="max-w-2xl mx-auto bg-white dark:bg-blue-900 text-gray-800 rounded-xl shadow-lg p-8">
+                    <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 relative overflow-hidden">
+                        {/* Background Pattern */}
+                        <div className="absolute inset-0 opacity-5">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#3674B5] to-[#A1E3F9] rounded-full blur-3xl"></div>
+                        </div>
+
                         <form
-                            action="https://formsubmit.co/slimekenyal123@gmail.com" // ganti sesuai endpoint email-mu
+                            action="https://formsubmit.co/slimekenyal123@gmail.com"
                             method="POST"
-                            className="space-y-4"
+                            className="space-y-6 relative z-10"
                         >
-                            {/* Nama Lengkap */}
-                            <div className="text-left">
-                                <label className="block font-semibold mb-1 dark:text-blue-100">
-                                    Nama Lengkap
-                                </label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    placeholder="Masukkan nama lengkap"
-                                    required
-                                    className="w-full px-4 py-3 border dark:border-white rounded-lg placeholder:text-gray-400  placeholder:dark:text-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                        Nama Lengkap
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        placeholder="Masukkan nama lengkap"
+                                        required
+                                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-all duration-300"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                        Email
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Masukkan alamat email"
+                                        required
+                                        className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-all duration-300"
+                                    />
+                                </div>
                             </div>
 
-                            {/* Email */}
-                            <div className="text-left">
-                                <label className="block font-semibold mb-1 dark:text-blue-100">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Masukkan alamat email"
-                                    required
-                                    className="w-full px-4 py-3 border dark:border-white rounded-lg placeholder:text-gray-400  placeholder:dark:text-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
-                            </div>
-
-                            {/* Pesan */}
-                            <div className="text-left">
-                                <label className="block font-semibold mb-1 dark:text-blue-100">
+                            <div>
+                                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                                     Pesan
                                 </label>
                                 <textarea
                                     name="message"
-                                    rows="5"
+                                    rows="6"
                                     placeholder="Tulis pesan Anda..."
                                     required
-                                    className="w-full px-4 py-3 border dark:border-white rounded-lg placeholder:text-gray-400  placeholder:dark:text-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-all duration-300 resize-none"
                                 />
                             </div>
 
-                            {/* Tombol Kirim */}
                             <div className="text-center">
                                 <button
                                     type="submit"
-                                    className="px-6 py-3 bg-[#3674B5] text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition"
+                                    className="group relative overflow-hidden inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-semibold rounded-xl hover:from-[#5682B1] hover:to-[#A1E3F9] transition-all duration-300 hover:scale-105 hover:shadow-lg"
                                 >
+                                    <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full"></span>
                                     Kirim Pesan
+                                    <ArrowRight size={16} />
                                 </button>
                             </div>
                         </form>
@@ -423,17 +508,228 @@ const Beranda = ({ setCurrentPage }) => {
                 </div>
             </section>
 
-            {/* <style jsx>{`
-        .fade-in {
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .fade-in.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      `}</style> */}
+            <style jsx>{`
+                /* Custom animations using Tailwind-compatible CSS */
+                .fade-in,
+                .slide-in-left,
+                .zoom-in {
+                    opacity: 0;
+                    transform: translateY(20px);
+                    transition: opacity 0.6s ease, transform 0.6s ease;
+                }
+                
+                .slide-in-left {
+                    transform: translateX(-20px);
+                }
+                
+                .zoom-in {
+                    transform: scale(0.9);
+                }
+                
+                .fade-in.visible,
+                .slide-in-left.visible,
+                .zoom-in.visible {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                
+                .slide-in-left.visible {
+                    transform: translateX(0);
+                }
+                
+                .zoom-in.visible {
+                    transform: scale(1);
+                }
+                
+                /* Line clamp utility */
+                .line-clamp-2 {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+                
+                /* Staggered animation delays */
+                .zoom-in:nth-child(1) { transition-delay: 0ms; }
+                .zoom-in:nth-child(2) { transition-delay: 100ms; }
+                .zoom-in:nth-child(3) { transition-delay: 200ms; }
+                .zoom-in:nth-child(4) { transition-delay: 300ms; }
+                .zoom-in:nth-child(5) { transition-delay: 400ms; }
+                .zoom-in:nth-child(6) { transition-delay: 500ms; }
+                
+                /* Custom scrollbar */
+                ::-webkit-scrollbar {
+                    width: 8px;
+                }
+                ::-webkit-scrollbar-track {
+                    @apply bg-slate-50 dark:bg-slate-900;
+                }
+                ::-webkit-scrollbar-thumb {
+                    @apply bg-slate-300 dark:bg-slate-600 rounded;
+                }
+                ::-webkit-scrollbar-thumb:hover {
+                    @apply bg-slate-400 dark:bg-slate-500;
+                }
+                
+                /* Selection styling */
+                ::selection {
+                    @apply bg-[#A1E3F9]/30 text-inherit;
+                }
+                .dark ::selection {
+                    @apply bg-[#3674B5]/40 text-inherit;
+                }
+                
+                /* Enhanced focus states */
+                input:focus,
+                textarea:focus,
+                button:focus {
+                    box-shadow: 0 0 0 3px rgba(54, 116, 181, 0.1);
+                }
+                
+                /* Smooth gradient background animation */
+                .bg-gradient-to-r,
+                .bg-gradient-to-br {
+                    background-size: 200% 200%;
+                }
+                
+                /* Pulse glow animation */
+                @keyframes pulse-glow {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                }
+                
+                .animate-pulse-glow {
+                    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                }
+                
+                /* Responsive improvements */
+                @media (max-width: 768px) {
+                    .zoom-in {
+                        transform: scale(0.95);
+                    }
+                    
+                    .zoom-in.visible {
+                        transform: scale(1);
+                    }
+                }
+                
+                /* High contrast mode support */
+                @media (prefers-contrast: high) {
+                    .text-slate-600 {
+                        @apply text-slate-800;
+                    }
+                    
+                    .dark .text-slate-300 {
+                        @apply dark:text-slate-100;
+                    }
+                    
+                    .border-slate-200\/50 {
+                        @apply border-slate-300;
+                    }
+                    
+                    .dark .border-slate-700\/50 {
+                        @apply dark:border-slate-600;
+                    }
+                }
+                
+                /* Print styles */
+                @media print {
+                    .shadow-lg,
+                    .shadow-xl,
+                    .shadow-2xl {
+                        box-shadow: none !important;
+                        @apply border border-slate-300;
+                    }
+                    
+                    .bg-gradient-to-r,
+                    .bg-gradient-to-br {
+                        @apply bg-[#3674B5] text-white;
+                    }
+                    
+                    .zoom-in,
+                    .fade-in,
+                    .slide-in-left {
+                        opacity: 1 !important;
+                        transform: none !important;
+                    }
+                    
+                    .hover\:scale-105:hover,
+                    .hover\:-translate-y-2:hover {
+                        transform: none !important;
+                    }
+                }
+                
+                /* Reduce motion for accessibility */
+                @media (prefers-reduced-motion: reduce) {
+                    .fade-in,
+                    .slide-in-left,
+                    .zoom-in,
+                    .transition-all,
+                    .transition-transform,
+                    .transition-colors {
+                        transition-duration: 0.01ms !important;
+                        animation-duration: 0.01ms !important;
+                        animation-iteration-count: 1 !important;
+                        scroll-behavior: auto !important;
+                    }
+                    
+                    .hover\:scale-105:hover,
+                    .hover\:-translate-y-2:hover,
+                    .group-hover\:scale-110,
+                    .group-hover\:translate-x-1 {
+                        transform: none !important;
+                    }
+                }
+                
+                /* Loading skeleton effect */
+                @keyframes skeleton {
+                    0% { background-position: -200px 0; }
+                    100% { background-position: calc(200px + 100%) 0; }
+                }
+                
+                .skeleton {
+                    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+                    background-size: 200px 100%;
+                    animation: skeleton 1.2s ease-in-out infinite;
+                }
+                
+                .dark .skeleton {
+                    background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+                }
+                
+                /* Hover effects enhancement */
+                .group:hover .group-hover\:scale-105 {
+                    transform: scale(1.05);
+                }
+                
+                .group:hover .group-hover\:translate-x-1 {
+                    transform: translateX(0.25rem);
+                }
+                
+                /* Button shimmer effect */
+                .shimmer {
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+                    transform: translateX(-100%);
+                    transition: transform 0.6s;
+                }
+                
+                .group:hover .shimmer {
+                    transform: translateX(100%);
+                }
+                
+                /* Card hover shadow enhancement */
+                .card-hover-shadow {
+                    transition: box-shadow 0.3s ease;
+                }
+                
+                .card-hover-shadow:hover {
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                }
+                
+                .dark .card-hover-shadow:hover {
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                }
+            `}</style>
         </div>
     );
 };

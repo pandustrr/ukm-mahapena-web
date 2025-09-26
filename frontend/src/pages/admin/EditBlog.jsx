@@ -51,7 +51,9 @@ function EditBlog() {
 
     const MySwal = withReactContent(Swal);
     const navigate = useNavigate();
-    const admin_id = sessionStorage.getItem("adminID");
+    // const admin_id = sessionStorage.getItem("adminID");
+    const token = sessionStorage.getItem("adminToken");
+
 
     // ambil kategori dari API
     const handleCancle = () => {
@@ -89,7 +91,9 @@ function EditBlog() {
     useEffect(() => {
         const fetchBlog = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/blogs/${id}`);
+                const res = await axios.get(`http://localhost:8000/api/admin/blogs/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
                 const blog = res.data.data;
                 // console.log(blog);
                 setForm({
@@ -145,8 +149,8 @@ function EditBlog() {
             // gunakan method override supaya Laravel menerima sebagai PUT
             payload.append("_method", "PUT");
 
-            await axios.post(`http://localhost:8000/api/blogs/${id}`, payload, {
-                headers: { "Content-Type": "multipart/form-data" },
+            await axios.post(`http://localhost:8000/api/admin/blogs/${id}`, payload, {
+                headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
             });
 
             // kembalikan ke Admin Dashboard dan render page 'blog'

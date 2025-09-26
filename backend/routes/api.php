@@ -19,10 +19,11 @@ use App\Http\Controllers\PublicAlumniController;
 use App\Http\Controllers\Admin\PortofolioController;
 use App\Http\Controllers\PublicPortofolioController;
 
-
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProkerController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\PublicBlogController;
+use App\Http\Controllers\PublicProkerController;
 
 // =====================
 // POST Routes
@@ -110,6 +111,14 @@ Route::get('/divisi', [PublicDivisiController::class, 'index']);
 Route::get('periodes-with-pengurus-public', [PublicPeriodeController::class, 'all']);
 Route::get('divisi/periode/{periodeId}', [PublicDivisiController::class, 'byPeriode']); // divisi by periode
 Route::get('pengurus-public', [PublicPengurusController::class, 'index']);
+
+// Public Proker
+Route::get('/public/proker', [PublicProkerController::class, 'index']);
+Route::get('/public/proker/{id}', [PublicProkerController::class, 'show']);
+
+// Public Blog
+Route::get('/blogs', [PublicBlogController::class, 'index']);
+Route::get('/blogs/{id}', [PublicBlogController::class, 'show']);
 
 // =====================
 // Public Alumni Routes
