@@ -81,7 +81,7 @@ const Blog = () => {
                         backgroundImage: `url(https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80)`
                     }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/80 to-[#113F67]/60 dark:from-[#000000]/90 dark:to-[#113F67]/70"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/70 to-[#113F67]/60 dark:from-[#000000]/90 dark:to-[#113F67]/70"></div>
                     <div className="absolute inset-0 bg-[#000000]/20 dark:bg-[#000000]/30"></div>
                 </div>
 

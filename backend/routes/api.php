@@ -30,9 +30,6 @@ use App\Http\Controllers\PublicProkerController;
 // =====================
 Route::apiResource('posts', PostController::class);
 
-
-
-
 Route::get('public/blogs', [BlogController::class, 'indexPublic']);
 Route::get('public/blogs/{slug}', [BlogController::class, 'showPublic']);
 
@@ -94,6 +91,18 @@ Route::prefix('admin')->group(function () {
 });
 
 // =====================
+// Admin (login/logout & profile)
+// =====================
+Route::prefix('admin')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/dashboard', [AuthController::class, 'dashboard']);
+    Route::put('/update-profile', [AuthController::class, 'updateProfile']);
+    Route::get('/profile', [AuthController::class, 'profile']);
+});
+
+
+// =====================
 // Public Merchandise Routes
 // =====================
 Route::get('/merchandises', [PublicMerchandiseController::class, 'index']);
@@ -133,10 +142,3 @@ Route::get('portofolio', [PublicPortofolioController::class, 'index']);
 Route::get('portofolio/{id}', [PublicPortofolioController::class, 'show']);
 
 
-// =====================
-// Admin (login/logout)
-// =====================
-Route::prefix('admin')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-});

@@ -48,13 +48,70 @@ class AuthController extends Controller
     }
 
     // dashboard admin
-    public function dashboard(Request $request)
+public function dashboard(Request $request)
+{
+    $token = $request->header('Authorization');
+    $admin = Admin::where('api_token', $token)->first();
+    if (!$admin) {
+        return response()->json(['message' => 'Unauthorized'], 401);
+    }
+
+    return response()->json([
+        'message' => 'Selamat datang di dashboard admin',
+        'username' => $admin->username, // tambahkan ini
+    ]);
+}
+
+    public function profile(Request $request)
     {
         $token = $request->header('Authorization');
-        if (!$token || !Admin::where('api_token', $token)->exists()) {
+        if (!$token) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        return response()->json(['message' => 'Selamat datang di dashboard admin']);
+        $admin = Admin::where('api_token', $token)->first();
+        if (!$admin) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        return response()->json([
+            'username' => $admin->username,
+            'name' => $admin->name ?? null,  // opsional
+            'email' => $admin->email ?? null // opsional
+        ]);
     }
+
+
+    public function updateProfile(Request $request)
+    {
+        $token = $request->header('Authorization');
+        if (!$token) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $admin = Admin::where('api_token', $token)->first();
+        if (!$admin) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $request->validate([
+            'username' => 'required|string|min:3|unique:admins,username,' . $admin->id,
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
+
+        $admin->username = $request->username;
+
+        if ($request->filled('password')) {
+            $admin->password = Hash::make($request->password);
+        }
+
+        // Hapus token lama supaya otomatis logout
+        $admin->api_token = null;
+        $admin->save();
+
+        return response()->json([
+            'message' => 'Profil berhasil diperbarui, silakan login kembali',
+        ], 200);
+    }
+
 }

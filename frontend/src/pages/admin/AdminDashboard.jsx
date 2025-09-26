@@ -7,6 +7,7 @@ import ManajemenPortofolio from "./ManajemenPortofolio";
 import ManajemenAlumni from "./ManajemenAlumni";
 import ManajemenBlog from "./ManajemenBlog";
 import ManajemenProker from "./ManajemenProker";
+import UbahProfilAdmin from "./UbahProfilAdmin";
 
 import {
   Users,
@@ -169,6 +170,7 @@ function AdminDashboard() {
         {activePage === "alumni" && <ManajemenAlumni />}
         {activePage === "proker" && <ManajemenProker />}
         {activePage === "blog" && <ManajemenBlog />}
+        {activePage === "ubah-profil" && <UbahProfilAdmin />}
       </main>
     </div>
   );
