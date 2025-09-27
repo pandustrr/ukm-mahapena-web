@@ -22,7 +22,6 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import CreateBlog from "./pages/admin/CreateBlog";
 import EditBlog from "./pages/admin/EditBlog";
 import DetailBlog from "./pages/DetailBlog";
-import ManajemenProker from "./pages/admin/ManajemenProker";
 import CreateProker from "./pages/admin/CreateProker";
 import EditProker from "./pages/admin/EditProker";
 function App() {
