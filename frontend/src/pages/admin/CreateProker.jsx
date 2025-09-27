@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { Upload } from "lucide-react";
 
 function CreateProker() {
   const [nama, setNama] = useState("");
@@ -18,7 +19,6 @@ function CreateProker() {
   const MySwal = withReactContent(Swal);
   const navigate = useNavigate();
   const token = sessionStorage.getItem("adminToken");
-
 
   // ambil kategori dari API
   const handleCancle = () => {
@@ -58,16 +58,19 @@ function CreateProker() {
       formData.append("nama", nama);
       formData.append("deskripsi", deskripsi);
       formData.append("tanggal", tanggal);
-      
+
       if (featuredImage) {
         formData.append("featured_image", featuredImage);
       }
 
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/admin/proker", 
+        "http://127.0.0.1:8000/api/admin/proker",
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data",  Authorization: `Bearer ${token}` },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -166,7 +169,7 @@ function CreateProker() {
         </div>
 
         {/* Upload Gambar */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Featured Image
           </label>
@@ -176,7 +179,6 @@ function CreateProker() {
             onChange={handleFileChange}
             className="w-1xl py-2 px-4 mt-2 text-sm rounded-md text-gray-600 focus:ring-blue-500"
           />
-          {/* Preview */}
           {preview && (
             <div className="mt-4">
               <p className="text-gray-600 text-sm mb-2">Preview:</p>
@@ -189,7 +191,29 @@ function CreateProker() {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
+
+        <label className="flex flex-col items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors duration-200">
+          {preview ? (
+            <img
+              src={preview}
+              alt="Preview"
+              className="w-full h-full object-cover rounded-lg"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center p-4 text-gray-500">
+              <Upload size={24} />
+              <span className="text-xs mt-1">Upload Gambar</span>
+            </div>
+          )}
+          <input
+            type="file"
+            name="featured_image"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+        </label>
 
         {/* Tombol Aksi */}
         <div className="flex gap-3 pt-4">

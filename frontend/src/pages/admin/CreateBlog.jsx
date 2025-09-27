@@ -28,6 +28,7 @@ import "tinymce/plugins/media";
 import "tinymce/plugins/table";
 import "tinymce/plugins/help";
 import "tinymce/plugins/wordcount";
+import { Upload } from "lucide-react";
 
 function CreateBlog() {
   const [title, setTitle] = useState("");
@@ -113,7 +114,10 @@ function CreateBlog() {
         "http://127.0.0.1:8000/api/admin/blogs",
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data",  Authorization: `Bearer ${token}` },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -233,13 +237,12 @@ function CreateBlog() {
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Featured Image
           </label>
-          <input
+          {/* <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
             className="w-1xl py-2 px-4 mt-2 text-sm rounded-md text-gray-600 focus:ring-blue-500"
           />
-          {/* Preview */}
           {preview && (
             <div className="mt-4">
               <p className="text-gray-600 text-sm mb-2">Preview:</p>
@@ -251,7 +254,28 @@ function CreateBlog() {
                 />
               </div>
             </div>
-          )}
+          )} */}
+          <label className="flex flex-col items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors duration-200">
+            {preview ? (
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center p-4 text-gray-500">
+                <Upload size={24} />
+                <span className="text-xs mt-1">Upload Gambar</span>
+              </div>
+            )}
+            <input
+              type="file"
+              name="featured_image"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </label>
         </div>
         {/* Tombol Aksi */}
         <div className="flex gap-3 pt-4">

@@ -18,12 +18,22 @@ import {
   Check,
   Loader,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // Confirmation Modal Component
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = "warning", confirmText, cancelText, isLoading }) => {
+const ConfirmationModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  type = "warning",
+  confirmText,
+  cancelText,
+  isLoading,
+}) => {
   if (!isOpen) return null;
 
   const getTypeStyles = () => {
@@ -77,9 +87,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = 
           <h2 className="text-lg font-semibold text-center text-gray-800 mb-2">
             {title}
           </h2>
-          <p className="text-center text-gray-600 mb-6">
-            {message}
-          </p>
+          <p className="text-center text-gray-600 mb-6">{message}</p>
           <div className="flex gap-3">
             <button
               onClick={onClose}
@@ -95,8 +103,18 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = 
             >
               {isLoading ? (
                 <>
-                  <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  <svg
+                    className="w-4 h-4 animate-spin"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    ></path>
                   </svg>
                   Loading...
                 </>
@@ -124,13 +142,17 @@ const ManajemenBlog = () => {
 
   // Modal states
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState({ type: '', id: null, name: '' });
+  const [deleteTarget, setDeleteTarget] = useState({
+    type: "",
+    id: null,
+    name: "",
+  });
 
   // Category form states
   const [formCategory, setFormCategory] = useState({
     id: null,
     name: "",
-    status: "active"
+    status: "active",
   });
 
   // Pagination
@@ -157,9 +179,12 @@ const ManajemenBlog = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/admin/blog-categories", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "http://127.0.0.1:8000/api/admin/blog-categories",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const data = res.data.data?.data || res.data;
       setCategories(data);
     } catch (err) {
@@ -173,10 +198,12 @@ const ManajemenBlog = () => {
   }, []);
 
   // Filter blogs
-  const filteredBlogs = blogs.filter(blog => {
-    const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredBlogs = blogs.filter((blog) => {
+    const matchesSearch =
+      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       blog.content?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === "all" || blog.status === filterStatus;
+    const matchesStatus =
+      filterStatus === "all" || blog.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
 
@@ -189,14 +216,14 @@ const ManajemenBlog = () => {
   // Category form handlers
   const handleCategoryChange = (e) => {
     const { name, value } = e.target;
-    setFormCategory(prev => ({ ...prev, [name]: value }));
+    setFormCategory((prev) => ({ ...prev, [name]: value }));
   };
 
   const resetCategory = () => {
     setFormCategory({
       id: null,
       name: "",
-      status: "active"
+      status: "active",
     });
   };
 
@@ -231,34 +258,42 @@ const ManajemenBlog = () => {
 
   const handleEditCategory = (category) => {
     setFormCategory(category);
-    document.getElementById('category-form')?.scrollIntoView({ behavior: 'smooth' });
+    document
+      .getElementById("category-form")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleDeleteCategory = (id) => {
-    const category = categories.find(c => c.id === id);
-    setDeleteTarget({ type: 'kategori', id, name: category?.name || '' });
+    const category = categories.find((c) => c.id === id);
+    setDeleteTarget({ type: "kategori", id, name: category?.name || "" });
     setShowDeleteModal(true);
   };
 
   const handleDeleteBlog = (id) => {
-    const blog = blogs.find(b => b.id === id);
-    setDeleteTarget({ type: 'blog', id, name: blog?.title || '' });
+    const blog = blogs.find((b) => b.id === id);
+    setDeleteTarget({ type: "blog", id, name: blog?.title || "" });
     setShowDeleteModal(true);
   };
 
   const confirmDelete = async () => {
     setIsDeleting(true);
     try {
-      if (deleteTarget.type === 'blog') {
-        await axios.delete(`http://localhost:8000/api/admin/blogs/${deleteTarget.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      if (deleteTarget.type === "blog") {
+        await axios.delete(
+          `http://localhost:8000/api/admin/blogs/${deleteTarget.id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setSuccess("Blog berhasil dihapus");
         fetchBlogs();
       } else {
-        await axios.delete(`http://localhost:8000/api/admin/blog-categories/${deleteTarget.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.delete(
+          `http://localhost:8000/api/admin/blog-categories/${deleteTarget.id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setSuccess("Kategori berhasil dihapus");
         fetchCategories();
       }
@@ -267,7 +302,7 @@ const ManajemenBlog = () => {
     } finally {
       setIsDeleting(false);
       setShowDeleteModal(false);
-      setDeleteTarget({ type: '', id: null, name: '' });
+      setDeleteTarget({ type: "", id: null, name: "" });
     }
   };
 
@@ -285,9 +320,9 @@ const ManajemenBlog = () => {
   };
 
   const truncateText = (text, maxLength) => {
-    if (!text) return '-';
+    if (!text) return "-";
     if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
+    return text.substring(0, maxLength) + "...";
   };
 
   return (
@@ -339,7 +374,10 @@ const ManajemenBlog = () => {
       )}
 
       {/* ====== CATEGORY SECTION ====== */}
-      <div id="category-form" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+      <div
+        id="category-form"
+        className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8"
+      >
         <div className="flex items-center gap-3 mb-6">
           <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
             <Tag className="w-4 h-4 text-purple-600" />
@@ -349,7 +387,10 @@ const ManajemenBlog = () => {
           </h2>
         </div>
 
-        <form onSubmit={handleCategorySubmit} className="flex flex-col md:flex-row gap-3 mb-6">
+        <form
+          onSubmit={handleCategorySubmit}
+          className="flex flex-col md:flex-row gap-3 mb-6"
+        >
           <input
             type="text"
             name="name"
@@ -400,9 +441,15 @@ const ManajemenBlog = () => {
           <table className="w-full rounded-lg overflow-hidden">
             <thead className="bg-gray-100">
               <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-700">No</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-700">Nama Kategori</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-700">Aksi</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">
+                  No
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">
+                  Nama Kategori
+                </th>
+                <th className="px-4 py-3 text-center font-medium text-gray-700">
+                  Aksi
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -412,10 +459,11 @@ const ManajemenBlog = () => {
                   return (
                     <tr
                       key={category.id}
-                      className={`transition-colors duration-200 ${isEditing
-                        ? "bg-green-300 border-l-4 border-purple-500"
-                        : "hover:bg-gray-50"
-                        }`}
+                      className={`transition-colors duration-200 ${
+                        isEditing
+                          ? "bg-green-300 border-l-4 border-purple-500"
+                          : "hover:bg-gray-50"
+                      }`}
                     >
                       <td className="px-4 py-3 text-gray-800 font-medium">
                         {index + 1}
@@ -436,10 +484,11 @@ const ManajemenBlog = () => {
                         <div className="flex justify-center gap-2">
                           <button
                             onClick={() => handleEditCategory(category)}
-                            className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${isEditing
-                              ? "bg-green-200 text-green-800 hover:bg-green-300"
-                              : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
-                              }`}
+                            className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
+                              isEditing
+                                ? "bg-green-200 text-green-800 hover:bg-green-300"
+                                : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
+                            }`}
                             disabled={isSaving}
                           >
                             <Edit3 size={14} />
@@ -460,7 +509,10 @@ const ManajemenBlog = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan="3" className="px-4 py-6 text-center text-gray-500">
+                  <td
+                    colSpan="3"
+                    className="px-4 py-6 text-center text-gray-500"
+                  >
                     Belum ada kategori
                   </td>
                 </tr>
@@ -476,15 +528,16 @@ const ManajemenBlog = () => {
           <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
             <BookOpen className="w-4 h-4 text-blue-600" />
           </div>
-          <h2 className="text-lg font-semibold text-gray-800">
-            Kelola Blog
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-800">Kelola Blog</h2>
         </div>
 
         {/* Search & Filter */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              size={20}
+            />
             <input
               type="text"
               placeholder="Cari blog..."
@@ -508,7 +561,9 @@ const ManajemenBlog = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-blue-50 rounded-lg p-4">
-            <div className="text-2xl font-bold text-blue-600">{blogs.length}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {blogs.length}
+            </div>
             <div className="text-gray-600 text-sm">Total Blog</div>
           </div>
           <div className="bg-green-50 rounded-lg p-4">
@@ -536,11 +591,21 @@ const ManajemenBlog = () => {
           <table className="w-full rounded-lg overflow-hidden">
             <thead className="bg-gray-100">
               <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-700 min-w-[200px]">Judul Blog</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-700 min-w-[120px]">Kategori</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-700 min-w-[100px]">Status</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-700 min-w-[120px]">Tanggal</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-700 min-w-[120px]">Aksi</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700 min-w-[200px]">
+                  Judul Blog
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700 min-w-[120px]">
+                  Kategori
+                </th>
+                <th className="px-4 py-3 text-center font-medium text-gray-700 min-w-[100px]">
+                  Status
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700 min-w-[120px]">
+                  Tanggal
+                </th>
+                <th className="px-4 py-3 text-center font-medium text-gray-700 min-w-[120px]">
+                  Aksi
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -555,7 +620,10 @@ const ManajemenBlog = () => {
                 </tr>
               ) : currentBlogs.length > 0 ? (
                 currentBlogs.map((blog, index) => (
-                  <tr key={blog.id} className="hover:bg-gray-50 transition-colors duration-200">
+                  <tr
+                    key={blog.id}
+                    className="hover:bg-gray-50 transition-colors duration-200"
+                  >
                     <td className="px-4 py-3 text-gray-800 font-medium">
                       <div className="max-w-[200px]">
                         <div title={blog.title}>
@@ -569,14 +637,18 @@ const ManajemenBlog = () => {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(blog.status)}`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                          blog.status
+                        )}`}
+                      >
                         {blog.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-600 text-sm">
                       {new Date(blog.created_at).toLocaleDateString("id-ID", {
                         day: "2-digit",
-                        month: "short",
+                        month: "long",
                         year: "numeric",
                       })}
                     </td>
@@ -602,11 +674,13 @@ const ManajemenBlog = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="px-4 py-6 text-center text-gray-500">
+                  <td
+                    colSpan="5"
+                    className="px-4 py-6 text-center text-gray-500"
+                  >
                     {filteredBlogs.length === 0 && blogs.length > 0
                       ? "Tidak ada blog yang sesuai dengan pencarian"
-                      : "Belum ada blog"
-                    }
+                      : "Belum ada blog"}
                   </td>
                 </tr>
               )}
@@ -618,11 +692,13 @@ const ManajemenBlog = () => {
         {totalPages > 1 && (
           <div className="mt-6 flex items-center justify-between">
             <div className="text-sm text-gray-700">
-              Menampilkan {indexOfFirstBlog + 1}-{Math.min(indexOfLastBlog, filteredBlogs.length)} dari {filteredBlogs.length} blog
+              Menampilkan {indexOfFirstBlog + 1}-
+              {Math.min(indexOfLastBlog, filteredBlogs.length)} dari{" "}
+              {filteredBlogs.length} blog
             </div>
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
@@ -645,10 +721,11 @@ const ManajemenBlog = () => {
                   <button
                     key={pageNum}
                     onClick={() => setCurrentPage(pageNum)}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 ${currentPage === pageNum
+                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                      currentPage === pageNum
                         ? "bg-blue-600 text-white"
                         : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-                      }`}
+                    }`}
                   >
                     {pageNum}
                   </button>
@@ -656,7 +733,9 @@ const ManajemenBlog = () => {
               })}
 
               <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 disabled={currentPage === totalPages}
                 className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
@@ -672,7 +751,7 @@ const ManajemenBlog = () => {
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
         onConfirm={confirmDelete}
-        title={`Hapus ${deleteTarget.type === 'blog' ? 'Blog' : 'Kategori'}`}
+        title={`Hapus ${deleteTarget.type === "blog" ? "Blog" : "Kategori"}`}
         message={`Apakah Anda yakin ingin menghapus ${deleteTarget.type} "${deleteTarget.name}"? Data yang dihapus tidak dapat dikembalikan.`}
         type="danger"
         confirmText="Ya, Hapus"
