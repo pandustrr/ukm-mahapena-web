@@ -552,10 +552,10 @@ function ManajemenMerchandise() {
                                         <tr
                                             key={c.id}
                                             className={`transition-colors duration-200 ${isEditing
-                                                    ? "bg-green-50 border-l-4 border-green-500"
-                                                    : isSelected
-                                                        ? "bg-blue-50 border-l-4 border-blue-500"
-                                                        : "hover:bg-gray-50"
+                                                ? "bg-green-50 border-l-4 border-green-500"
+                                                : isSelected
+                                                    ? "bg-blue-50 border-l-4 border-blue-500"
+                                                    : "hover:bg-gray-50"
                                                 }`}
                                         >
                                             <td className="px-4 py-3 text-gray-800 font-medium">{c.name}</td>
@@ -564,8 +564,8 @@ function ManajemenMerchandise() {
                                                     <button
                                                         onClick={() => handleEditCategory(c)}
                                                         className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${isEditing
-                                                                ? "bg-green-200 text-green-800 hover:bg-green-300"
-                                                                : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
+                                                            ? "bg-green-200 text-green-800 hover:bg-green-300"
+                                                            : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
                                                             }`}
                                                         disabled={loading}
                                                     >
@@ -752,7 +752,7 @@ function ManajemenMerchandise() {
                                             &times;
                                         </button>
                                     </span>
-                                ))  }
+                                ))}
                             </div>
                         </div>
 
@@ -855,15 +855,20 @@ function ManajemenMerchandise() {
                                     <th className="px-4 py-3 text-left font-medium text-gray-700">Nama</th>
                                     <th className="px-4 py-3 text-left font-medium text-gray-700">Harga</th>
                                     <th className="px-4 py-3 text-left font-medium text-gray-700">Stok</th>
+                                    <th className="px-4 py-3 text-left font-medium text-gray-700">Terjual</th>
+                                    <th className="px-4 py-3 text-left font-medium text-gray-700">Penjualan</th> {/* ✅ Kolom baru */}
                                     <th className="px-4 py-3 text-left font-medium text-gray-700">Ukuran</th>
                                     <th className="px-4 py-3 text-left font-medium text-gray-700">Warna</th>
                                     <th className="px-4 py-3 text-center font-medium text-gray-700">Aksi</th>
                                 </tr>
                             </thead>
+
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {filteredMerchandises.length > 0 ? (
                                     filteredMerchandises.map((m) => {
                                         const isEditing = formMerchandise.id === m.id;
+                                        const totalPenjualan = (m.sold ?? 0) * (m.price ?? 0); // ✅ Hitung total penjualan
+
                                         return (
                                             <tr
                                                 key={m.id}
@@ -879,7 +884,8 @@ function ManajemenMerchandise() {
                                                             alt={m.name}
                                                             className="w-12 h-12 object-cover rounded"
                                                             onError={(e) => {
-                                                                e.target.src = 'https://via.placeholder.com/64?text=No+Image';
+                                                                e.target.src =
+                                                                    "https://via.placeholder.com/64?text=No+Image";
                                                             }}
                                                         />
                                                     ) : (
@@ -889,29 +895,45 @@ function ManajemenMerchandise() {
                                                     )}
                                                 </td>
                                                 <td className="px-4 py-3 text-gray-800 font-medium">{m.name}</td>
-                                                <td className="px-4 py-3 text-gray-600">Rp {Number(m.price).toLocaleString('id-ID')}</td>
+                                                <td className="px-4 py-3 text-gray-600">
+                                                    Rp {Number(m.price).toLocaleString("id-ID")}
+                                                </td>
                                                 <td className="px-4 py-3 text-gray-600">{m.stock}</td>
+                                                <td className="px-4 py-3 text-gray-600">{m.sold ?? 0}</td>
+                                                <td className="px-4 py-3 text-gray-600">
+                                                    Rp {totalPenjualan.toLocaleString("id-ID")} {/* ✅ Penjualan */}
+                                                </td>
                                                 <td className="px-4 py-3 text-gray-600">
                                                     {m.sizes && m.sizes.length > 0 ? (
                                                         <div className="flex flex-col gap-1">
                                                             {m.sizes.map((size, i) => (
-                                                                <span key={i} className="bg-gray-200 px-2 py-1 rounded text-xs">
+                                                                <span
+                                                                    key={i}
+                                                                    className="bg-gray-200 px-2 py-1 rounded text-xs"
+                                                                >
                                                                     {size}
                                                                 </span>
                                                             ))}
                                                         </div>
-                                                    ) : "-"}
+                                                    ) : (
+                                                        "-"
+                                                    )}
                                                 </td>
                                                 <td className="px-4 py-3 text-gray-600">
                                                     {m.colors && m.colors.length > 0 ? (
                                                         <div className="flex flex-col gap-1">
                                                             {m.colors.map((color, i) => (
-                                                                <span key={i} className="bg-gray-200 px-2 py-1 rounded text-xs">
+                                                                <span
+                                                                    key={i}
+                                                                    className="bg-gray-200 px-2 py-1 rounded text-xs"
+                                                                >
                                                                     {color}
                                                                 </span>
                                                             ))}
                                                         </div>
-                                                    ) : "-"}
+                                                    ) : (
+                                                        "-"
+                                                    )}
                                                 </td>
                                                 <td className="px-4 py-3 text-center">
                                                     <div className="flex justify-center gap-2">
@@ -941,7 +963,7 @@ function ManajemenMerchandise() {
                                     })
                                 ) : (
                                     <tr>
-                                        <td colSpan="7" className="px-4 py-6 text-center text-gray-500">
+                                        <td colSpan="9" className="px-4 py-6 text-center text-gray-500">
                                             Belum ada merchandise untuk kategori ini
                                         </td>
                                     </tr>

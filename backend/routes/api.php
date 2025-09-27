@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\PortofolioController;
 use App\Http\Controllers\PublicPortofolioController;
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProkerController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\PublicBlogController;
@@ -29,9 +30,6 @@ use App\Http\Controllers\PublicProkerController;
 // POST Routes
 // =====================
 Route::apiResource('posts', PostController::class);
-
-
-
 
 Route::get('public/blogs', [BlogController::class, 'indexPublic']);
 Route::get('public/blogs/{slug}', [BlogController::class, 'showPublic']);
@@ -53,6 +51,7 @@ Route::prefix('admin')->group(function () {
     Route::put('merchandises/{id}', [MerchandiseController::class, 'update']);
     Route::delete('merchandises/{id}', [MerchandiseController::class, 'destroy']);
     Route::post('merchandises/{id}/image', [MerchandiseController::class, 'updateImage']);
+    Route::get('/merchandise-sales', [MerchandiseController::class, 'totalSales']);
 
     // Category Merchandise CRUD manual
     Route::get('categories', [CategoryMerchandiseController::class, 'index']);
@@ -94,6 +93,18 @@ Route::prefix('admin')->group(function () {
 });
 
 // =====================
+// Admin (login/logout & profile)
+// =====================
+Route::prefix('admin')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/dashboard', [AuthController::class, 'dashboard']);
+    Route::put('/update-profile', [AuthController::class, 'updateProfile']);
+    Route::get('/profile', [AuthController::class, 'profile']);
+});
+
+
+// =====================
 // Public Merchandise Routes
 // =====================
 Route::get('/merchandises', [PublicMerchandiseController::class, 'index']);
@@ -133,10 +144,3 @@ Route::get('portofolio', [PublicPortofolioController::class, 'index']);
 Route::get('portofolio/{id}', [PublicPortofolioController::class, 'show']);
 
 
-// =====================
-// Admin (login/logout)
-// =====================
-Route::prefix('admin')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-});
