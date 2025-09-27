@@ -10,6 +10,8 @@ use App\Models\Admin;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB; // ✅ Tambahkan ini
+
 
 class MerchandiseController extends Controller
 {
@@ -40,6 +42,7 @@ class MerchandiseController extends Controller
                 'name' => $m->name,
                 'price' => $m->price,
                 'stock' => $m->stock,
+                'sold' => $m->sold,
                 'description' => $m->description,
                 'sizes' => $m->sizes,
                 'colors' => $m->colors,
@@ -81,6 +84,7 @@ class MerchandiseController extends Controller
         $merch->category_id = $request->category_id;
         $merch->price = $request->price;
         $merch->stock = $request->stock;
+        $merch->sold = 0;
         $merch->description = $request->description ?? '';
         $merch->sizes = $request->sizes ?? [];
         $merch->colors = $request->colors ?? [];
@@ -189,6 +193,7 @@ class MerchandiseController extends Controller
         }
 
         $merch->stock -= $jumlah;
+        $merch->sold += $jumlah; // ✅ tambah ke sold
         $merch->save();
 
         return response()->json([
@@ -197,9 +202,20 @@ class MerchandiseController extends Controller
         ]);
     }
 
-//     public function totalSales()
-// {
-//     $total = \App\Models\Merchandise::sum('terjual'); // kolom "terjual" di tabel merchandise
-//     return response()->json(['totalSales' => $total]);
-// }
+public function totalSales(Request $request)
+{
+    if (!$this->checkToken($request)) {
+        return response()->json(['message' => 'Unauthorized'], 401);
+    }
+
+    $totalSold = Merchandise::sum('sold');
+    $totalRevenue = Merchandise::sum(DB::raw('sold * price'));
+
+    return response()->json([
+        'totalSold' => $totalSold,
+        'totalRevenue' => $totalRevenue,
+    ]);
+}
+
+
 }

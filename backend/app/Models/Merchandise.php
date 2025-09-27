@@ -14,6 +14,7 @@ class Merchandise extends Model
         'name',
         'price',
         'stock',
+        'sold',
         'description',
         'sizes',
         'colors',
@@ -24,7 +25,9 @@ class Merchandise extends Model
         'sizes' => 'array',
         'colors' => 'array',
         'price' => 'decimal:2',
-        'stock' => 'integer'
+        'stock' => 'integer',
+        'sold' => 'integer' 
+
     ];
 
     public function category()

@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\PortofolioController;
 use App\Http\Controllers\PublicPortofolioController;
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProkerController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\PublicBlogController;
@@ -50,7 +51,7 @@ Route::prefix('admin')->group(function () {
     Route::put('merchandises/{id}', [MerchandiseController::class, 'update']);
     Route::delete('merchandises/{id}', [MerchandiseController::class, 'destroy']);
     Route::post('merchandises/{id}/image', [MerchandiseController::class, 'updateImage']);
-    Route::get('/admin/merchandise-sales', [MerchandiseController::class, 'totalSales']);
+    Route::get('/merchandise-sales', [MerchandiseController::class, 'totalSales']);
 
     // Category Merchandise CRUD manual
     Route::get('categories', [CategoryMerchandiseController::class, 'index']);
