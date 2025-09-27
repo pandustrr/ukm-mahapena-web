@@ -347,18 +347,6 @@ const Beranda = ({ setCurrentPage }) => {
             </Link>
           </div>
         </div>
-
-        {/* Top Wave Transition */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1440 80"
-            preserveAspectRatio="none"
-            className="w-full h-12 fill-slate-50 dark:fill-slate-800"
-          >
-            <path d="M0,0L80,8C160,16,320,32,480,37.3C640,43,800,37,960,32C1120,27,1280,21,1360,18.7L1440,16L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z"></path>
-          </svg>
-        </div>
       </section>
 
       {/* Berita Terbaru */}
@@ -445,15 +433,75 @@ const Beranda = ({ setCurrentPage }) => {
         </div>
 
         {/* Bottom Wave Transition */}
-        <div className="absolute bottom-0 left-0 right-0">
+        {/* <div className="absolute bottom-0 left-0 right-0">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1440 80"
             preserveAspectRatio="none"
-            className="w-full h-12 fill-white dark:fill-slate-900"
+            className="w-full h-12 bg-transparent dark:fill-slate-900"
           >
             <path d="M0,40L80,42.7C160,45,320,51,480,48C640,45,800,33,960,32C1120,31,1280,41,1360,45.3L1440,48L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z"></path>
           </svg>
+        </div> */}
+      </section>
+
+      <section
+        className="relative bg-cover bg-center bg-no-repeat h-[50rem] flex items-center justify-center"
+        style={{
+          backgroundImage:
+            "url('https://images.pexels.com/photos/1884583/pexels-photo-1884583.jpeg')",
+        }}
+      >
+        {/* Overlay gelap agar teks lebih terbaca */}
+        <div className="absolute inset-0 bg-black/50"></div>
+
+        {/* Wave atas */}
+        <div className="absolute top-0 left-0 right-0 rotate-180 overflow-hidden leading-[0]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1440 320"
+            preserveAspectRatio="none"
+            className="w-full h-20 text-slate-50 dark:text-slate-800"
+          >
+            <path
+              className="fill-current"
+              d="M0,32L60,37.3C120,43,240,53,360,90.7C480,128,600,192,720,197.3C840,203,960,149,1080,112C1200,75,1320,53,1380,42.7L1440,32L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
+            ></path>
+          </svg>
+        </div>
+
+        {/* Wave bawah untuk menyatu dengan section selanjutnya */}
+        <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-[0]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1440 80"
+            preserveAspectRatio="none"
+            className="w-full h-20"
+          >
+            <path
+              className="fill-current text-white dark:text-slate-900"
+              d="M0,40L80,42.7C160,45,320,51,480,48C640,45,800,33,960,32C1120,31,1280,41,1360,45.3L1440,48L1440,80L0,80Z"
+            />
+          </svg>
+        </div>
+
+        {/* Konten hero */}
+        <div className="relative z-10 text-center text-white px-4">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">
+            Dukung Kami dengan Merchandise Resmi 🎉
+          </h2>
+          <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-200 capitalize">
+            Dapatkan kaos, totebag, dan merchandise eksklusif. Setiap pembelian
+            mendukung program mahasiswa!
+          </p>
+
+          <Link
+            to="/merchandise"
+            className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-semibold rounded-xl hover:from-[#5682B1] hover:to-[#A1E3F9] transition-all duration-300 hover:scale-105 hover:shadow-lg"
+          >
+            <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full"></span>
+            Lihat Semua Merchandise
+          </Link>
         </div>
       </section>
 
