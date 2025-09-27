@@ -34,7 +34,9 @@ function DashboardContent({ setActivePage }) {
     totalProker: 0,
     totalBlog: 0,
     totalPortofolio: 0,
-    totalMerchandise: 0
+    totalMerchandise: 0,
+    // totalSales: 0   // 👈 tambahan
+
   });
   const [loading, setLoading] = useState(true);
 
@@ -56,7 +58,9 @@ function DashboardContent({ setActivePage }) {
           prokerRes,
           blogRes,
           portofolioRes,
-          merchandiseRes
+          merchandiseRes,
+          salesRes // 👈 tambahan
+
         ] = await Promise.all([
           fetch('http://localhost:8000/api/admin/divisis', { headers }),
           fetch('http://localhost:8000/api/admin/pengurus', { headers }),
@@ -64,7 +68,9 @@ function DashboardContent({ setActivePage }) {
           fetch('http://localhost:8000/api/admin/proker', { headers }),
           fetch('http://localhost:8000/api/admin/blogs', { headers }),
           fetch('http://localhost:8000/api/admin/portofolio', { headers }),
-          fetch('http://localhost:8000/api/admin/merchandises', { headers })
+          fetch('http://localhost:8000/api/admin/merchandises', { headers }),
+          // fetch('http://localhost:8000/api/admin/merchandise-sales', { headers }) // 👈 tambahan
+
         ]);
 
         // Parse responses
@@ -88,7 +94,9 @@ function DashboardContent({ setActivePage }) {
               ? blogData.length
               : 0,
           totalPortofolio: Array.isArray(portofolioData) ? portofolioData.length : 0,
-          totalMerchandise: Array.isArray(merchandiseData) ? merchandiseData.length : 0
+          totalMerchandise: Array.isArray(merchandiseData) ? merchandiseData.length : 0,
+          // totalSales: salesData?.totalSales || 0   // 👈 tambahan
+
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -164,7 +172,10 @@ function DashboardContent({ setActivePage }) {
       bgColor: "bg-pink-50",
       iconColor: "text-pink-600",
       borderColor: "border-pink-200"
-    }
+    },
+
+    { title: "Ubah Profil", description: "Perbarui informasi admin", icon: Settings, action: "ubah-profil", color: "yellow", bgColor: "bg-yellow-50", borderColor: "border-yellow-200" }
+
   ];
 
   const recentActivities = [
@@ -200,10 +211,6 @@ function DashboardContent({ setActivePage }) {
             Selamat datang kembali! Berikut adalah ringkasan data sistem.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <Clock size={16} />
-          <span>Terakhir diperbarui: {new Date().toLocaleDateString('id-ID')}</span>
-        </div>
       </div>
 
       {/* Stats Grid */}
@@ -231,10 +238,10 @@ function DashboardContent({ setActivePage }) {
                   ) : (
                     <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
                   )}
-                  <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full flex items-center gap-1">
+                  {/* <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full flex items-center gap-1">
                     <TrendingUp size={10} />
                     Aktif
-                  </span>
+                  </span> */}
                 </div>
               </div>
               <div className={`${stat.iconColor} p-2 rounded-lg bg-white/60`}>

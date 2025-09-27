@@ -196,4 +196,10 @@ class MerchandiseController extends Controller
             'stock' => $merch->stock
         ]);
     }
+
+//     public function totalSales()
+// {
+//     $total = \App\Models\Merchandise::sum('terjual'); // kolom "terjual" di tabel merchandise
+//     return response()->json(['totalSales' => $total]);
+// }
 }
