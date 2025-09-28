@@ -446,7 +446,7 @@ const Beranda = ({ setCurrentPage }) => {
       </section>
 
       <section
-        className="relative bg-cover bg-center bg-no-repeat h-[50rem] flex items-center justify-center"
+        className="relative bg-cover bg-center bg-no-repeat h-[30rem] flex items-center justify-center"
         style={{
           backgroundImage:
             "url('https://images.pexels.com/photos/1884583/pexels-photo-1884583.jpeg')",
@@ -492,14 +492,18 @@ const Beranda = ({ setCurrentPage }) => {
           </h2>
           <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-200 capitalize">
             Dapatkan kaos, totebag, dan merchandise eksklusif. Setiap pembelian
-            mendukung program mahasiswa!
+            mendukung perkembangan Kami!
           </p>
 
           <Link
             to="/merchandise"
-            className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-semibold rounded-xl hover:from-[#5682B1] hover:to-[#A1E3F9] transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 
+             bg-gradient-to-r from-yellow-400 to-yellow-500 
+             text-slate-900 font-semibold rounded-xl
+             hover:from-yellow-500 hover:to-yellow-100 
+             transition-all duration-300 hover:scale-105 hover:shadow-lg"
           >
-            <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full"></span>
+            <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-500 group-hover:translate-x-full"></span>
             Lihat Semua Merchandise
           </Link>
         </div>
