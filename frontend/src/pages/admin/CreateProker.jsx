@@ -58,6 +58,7 @@ function CreateProker() {
       formData.append("nama", nama);
       formData.append("deskripsi", deskripsi);
       formData.append("tanggal", tanggal);
+      formData.append("status", status);
 
       if (featuredImage) {
         formData.append("featured_image", featuredImage);

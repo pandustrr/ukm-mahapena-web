@@ -129,8 +129,9 @@ const Beranda = ({ setCurrentPage }) => {
             </span>
           </h1>
           <p className="text-lg md:text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed capitalize">
-            Wadah pengembangan kreativitas dan inovasi mahasiswa untuk
-            mengeksplorasi potensi diri.
+            Wadah para Mahasiswa Fakultas Ekonomi dan Bisnis Universitas Jember
+            untuk mengekspresikan dirinya dalam ruang lingkup alam bebas maupun
+            lingkungan hidup.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
@@ -188,8 +189,8 @@ const Beranda = ({ setCurrentPage }) => {
             </h2>
             <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
             <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto capitalize">
-              Berbagai program inovatif untuk mengembangkan potensi dan
-              kreativitas mahasiswa
+              Berbagai program inovatif untuk mengembangkan minat dan bakat
+              mahasiswa
             </p>
           </div>
 
@@ -197,13 +198,13 @@ const Beranda = ({ setCurrentPage }) => {
             {[
               {
                 title: "Pelatihan Rutin",
-                desc: "Mengasah skill mahasiswa dalam bidang kreativitas dan inovasi.",
+                desc: "Mengasah skill mahasiswa dalam bidang yang diminati.",
                 icon: <Users className="w-8 h-8 text-[#3674B5]" />,
                 gradient: "from-[#3674B5] to-[#5682B1]",
               },
               {
                 title: "Kompetisi",
-                desc: "Ajang kompetisi untuk menguji kemampuan dan kreativitas mahasiswa.",
+                desc: "Ajang kompetisi untuk menguji kemampuan dan keterampilan mahasiswa.",
                 icon: <Trophy className="w-8 h-8 text-[#5682B1]" />,
                 gradient: "from-[#5682B1] to-[#A1E3F9]",
               },
