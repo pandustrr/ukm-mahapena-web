@@ -15,9 +15,8 @@ class Alumni extends Model
         'nama',
         'prodi',
         'angkatan',
-        'jabatan',
-        'divisi',
-        'periode',
+        'pekerjaan',
+        'deskripsi',
         'foto',
     ];
 }

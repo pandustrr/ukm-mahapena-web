@@ -27,8 +27,7 @@ const Footer = () => {
               <span className="text-xl font-bold text-[#FFFFFF]">MAHAPENA</span>
             </div>
             <p className="text-[#5682B1] dark:text-[#5682B1] mb-4 leading-relaxed text-sm">
-              Unit Kegiatan Mahasiswa yang berfokus pada pengembangan
-              kreativitas, inovasi, dan entrepreneurship di kalangan mahasiswa.
+              Mahapena merupakan wadah bagi Mahasiswa S1 Fakultas Ekonomi dan Bisnis Universitas Jember untuk berkegiatan di alam bebas, berkontribusi bagi masyarakat, serta peduli terhadap pelestarian lingkungan.
             </p>
             <div className="flex space-x-4">
               {/* Sosial Media */}

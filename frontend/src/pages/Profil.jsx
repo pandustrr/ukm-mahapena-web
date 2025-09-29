@@ -1,6 +1,366 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+// Modal Component untuk detail alumni
+const AlumniDetailModal = ({ isOpen, onClose, alumni }) => {
+    if (!isOpen || !alumni) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <div
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+                onClick={onClose}
+            />
+
+            {/* Modal Content */}
+            <div className="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 max-h-[90vh] overflow-y-auto">
+                {/* Header */}
+                <div className="relative p-6 border-b border-gray-200 dark:border-slate-700">
+                    <button
+                        onClick={onClose}
+                        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-all duration-200"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    <div className="flex items-center gap-4">
+                        {/* Foto Alumni */}
+                        <div className="relative w-20 h-20 rounded-2xl overflow-hidden shadow-lg border-2 border-[#5682B1]">
+                            {alumni.foto ? (
+                                <img
+                                    src={`http://localhost:8000/storage/${alumni.foto}`}
+                                    alt={alumni.nama}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                        e.target.style.display = 'none';
+                                        e.target.nextSibling.style.display = 'flex';
+                                    }}
+                                />
+                            ) : null}
+                            <div className={`w-full h-full ${alumni.foto ? 'hidden' : 'flex'} items-center justify-center bg-gradient-to-r from-[#5682B1] to-[#3674B5] text-white font-bold text-2xl`}>
+                                {alumni.nama.charAt(0).toUpperCase()}
+                            </div>
+                        </div>
+
+                        {/* Info Dasar */}
+                        <div className="flex-1">
+                            <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-1">
+                                {alumni.nama}
+                            </h3>
+                            <p className="text-lg text-gray-600 dark:text-gray-300">
+                                {alumni.prodi} • Angkatan {alumni.angkatan}
+                            </p>
+                            {alumni.pekerjaan && (
+                                <div className="mt-2">
+                                    <span className="inline-block px-3 py-1 text-sm font-medium text-[#5682B1] bg-[#5682B1]/10 rounded-full border border-[#5682B1]/20">
+                                        {alumni.pekerjaan}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Body - Deskripsi */}
+                <div className="p-6">
+                    <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Deskripsi
+                    </h4>
+
+                    {alumni.deskripsi ? (
+                        <div className="prose prose-gray dark:prose-invert max-w-none">
+                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+                                {alumni.deskripsi}
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="text-center py-8">
+                            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center">
+                                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <p className="text-gray-500 dark:text-gray-400">
+                                Belum ada deskripsi tersedia untuk alumni ini
+                            </p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Footer */}
+                <div className="p-6 pt-0">
+                    <button
+                        onClick={onClose}
+                        className="w-full px-6 py-3 bg-gradient-to-r from-[#3674B5] to-[#5682B1] hover:from-[#2d5a94] hover:to-[#4571a0] text-white font-medium rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Modal Component untuk Lambang MAHAPENA
+const LogoModal = ({ isOpen, onClose }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <div
+                className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300"
+                onClick={onClose}
+            />
+
+            {/* Modal Content */}
+            <div className="relative w-full max-w-5xl bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 max-h-[90vh] overflow-y-auto">
+                {/* Header */}
+                <div className="relative p-6 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white rounded-t-2xl">
+                    <button
+                        onClick={onClose}
+                        className="absolute top-4 right-4 p-2 text-white/80 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-200"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    <div className="text-center">
+                        <h3 className="text-2xl font-bold mb-2">
+                            Lambang MAHAPENA
+                        </h3>
+                        <p className="text-white/90">
+                            Mahasiswa Pecinta Alam Fakultas Ekonomi Universitas Jember
+                        </p>
+                    </div>
+                </div>
+
+                {/* Body */}
+                <div className="p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* Logo Section */}
+                        <div className="flex flex-col items-center">
+                            <div className="relative">
+                                <div className="w-64 h-64 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-3xl p-6 shadow-2xl">
+                                    <div className="w-full h-full rounded-2xl flex items-center justify-center">
+                                        <img
+                                            src="/logo.png"
+                                            alt="Logo MAHAPENA"
+                                            className="w-full h-full object-contain drop-shadow-lg"
+                                            onError={(e) => {
+                                                // Fallback jika gambar tidak ditemukan
+                                                e.target.style.display = 'none';
+                                                e.target.nextSibling.style.display = 'flex';
+                                            }}
+                                        />
+                                        {/* Fallback content */}
+                                        <div className="hidden w-full h-full bg-white/20 rounded-2xl items-center justify-center backdrop-blur-sm border border-white/30">
+                                            <div className="text-center">
+                                                <div className="text-4xl font-bold text-white mb-2">MAHAPENA</div>
+                                                <div className="text-xs text-white/90">LOGO</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="absolute -inset-4 bg-gradient-to-r from-[#3674B5]/20 to-[#A1E3F9]/20 rounded-3xl blur-xl"></div>
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-4 text-center">
+                                Tahun Berdiri: <span className="font-semibold">14 Maret 1977</span>
+                            </p>
+                        </div>
+
+                        {/* Description Section */}
+                        <div className="space-y-6">
+                            <div>
+                                <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-3 flex items-center">
+                                    <svg className="w-5 h-5 mr-2 text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Makna Lambang
+                                </h4>
+                                <div className="prose prose-sm dark:prose-invert max-w-none">
+                                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                        Lambang organisasi <strong>MAHAPENA</strong> Fakultas Ekonomi Universitas Jember berbentuk <strong>segi enam</strong> dengan makna yang mendalam dalam setiap elemennya.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Kode Etik Section */}
+                            <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-4">
+                                <h5 className="font-semibold text-gray-800 dark:text-white mb-3">Kode Etik Pecinta Alam Indonesia</h5>
+                                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                    <li className="flex items-start">
+                                        <span className="w-2 h-2 bg-[#5682B1] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                        Mengabdi kepada Tuhan Yang Maha Esa
+                                    </li>
+                                    <li className="flex items-start">
+                                        <span className="w-2 h-2 bg-[#5682B1] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                        Mengabdi kepada Bangsa dan Tanah Air
+                                    </li>
+                                    <li className="flex items-start">
+                                        <span className="w-2 h-2 bg-[#5682B1] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                        Menghormati tata kehidupan yang berlaku pada masyarakat sekitarnya
+                                    </li>
+                                    <li className="flex items-start">
+                                        <span className="w-2 h-2 bg-[#5682B1] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                        Berusaha mempererat tali persaudaraan sesama pecinta alam
+                                    </li>
+                                    <li className="flex items-start">
+                                        <span className="w-2 h-2 bg-[#5682B1] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                        Berusaha saling membantu dan saling menghargai dalam pelaksanaan pengabdian
+                                    </li>
+                                    <li className="flex items-start">
+                                        <span className="w-2 h-2 bg-[#5682B1] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                        Memelihara alam beserta isinya serta mempergunakan alam sesuai dengan batas kebutuhan
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Detailed Explanation */}
+                    <div className="mt-8 space-y-6">
+                        <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                            <svg className="w-5 h-5 mr-2 text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Penjelasan Detail Elemen Lambang
+                        </h4>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Colors Section */}
+                            <div className="bg-white dark:bg-slate-700 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-600">
+                                <h5 className="font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                                    <div className="w-4 h-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded mr-2"></div>
+                                    Makna Warna
+                                </h5>
+                                <div className="space-y-3">
+                                    <div className="flex items-start">
+                                        <div className="w-4 h-4 bg-yellow-400 rounded-full mt-1 mr-3 flex-shrink-0"></div>
+                                        <div>
+                                            <span className="font-medium">Kuning:</span> Warna lambang bendera Fakultas Ekonomi Universitas Jember
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start">
+                                        <div className="w-4 h-4 bg-orange-500 rounded-full mt-1 mr-3 flex-shrink-0"></div>
+                                        <div>
+                                            <span className="font-medium">Oranye:</span> Kehangatan, melenyapkan perasaan tertekan, menimbulkan rasa gembira
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start">
+                                        <div className="w-4 h-4 bg-blue-800 rounded-full mt-1 mr-3 flex-shrink-0"></div>
+                                        <div>
+                                            <span className="font-medium">Biru Tua:</span> Ketenteraman
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start">
+                                        <div className="w-4 h-4 bg-blue-400 rounded-full mt-1 mr-3 flex-shrink-0"></div>
+                                        <div>
+                                            <span className="font-medium">Biru Muda:</span> Keluasan, mengurangi ketegangan, kesucian
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start">
+                                        <div className="w-4 h-4 bg-red-600 rounded-full mt-1 mr-3 flex-shrink-0"></div>
+                                        <div>
+                                            <span className="font-medium">Merah:</span> Keberanian, semangat kerja
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Symbols Section */}
+                            <div className="bg-white dark:bg-slate-700 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-600">
+                                <h5 className="font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                                    <svg className="w-4 h-4 mr-2 text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3l14 9-14 9V3z" />
+                                    </svg>
+                                    Makna Simbol
+                                </h5>
+                                <div className="space-y-3 text-sm">
+                                    <div>
+                                        <span className="font-medium">Lingkaran Tertutup Gunung:</span> Matahari, Bulan, atau Bintang (tata surya)
+                                    </div>
+                                    <div>
+                                        <span className="font-medium">Dua Gunung:</span> Sikap tegak dari alam yang terbentang luas
+                                    </div>
+                                    <div>
+                                        <span className="font-medium">Tiga Puncak:</span> Bulan berdirinya MAHAPENA (Maret)
+                                    </div>
+                                    <div>
+                                        <span className="font-medium">Burung Camar:</span> Lambang utama MAHAPENA
+                                    </div>
+                                    <div>
+                                        <span className="font-medium">Kepala Menghadap Kanan:</span> Aktivitas menuju kebaikan
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Numbers Section */}
+                            <div className="bg-white dark:bg-slate-700 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-600">
+                                <h5 className="font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                                    <svg className="w-4 h-4 mr-2 text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                                    </svg>
+                                    Makna Angka
+                                </h5>
+                                <div className="space-y-3 text-sm">
+                                    <div className="flex items-center">
+                                        <span className="bg-[#5682B1] text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">7</span>
+                                        <div>Sayap Kanan & Kiri (7-7): Tahun berdiri 1977</div>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <span className="bg-[#3674B5] text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">14</span>
+                                        <div>Total sayap (14): Tanggal berdiri (14 Maret)</div>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <span className="bg-[#A1E3F9] text-slate-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">5</span>
+                                        <div>Ekor (5): Melambangkan Pancasila</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* History Section */}
+                            <div className="bg-gradient-to-br from-[#3674B5]/5 to-[#A1E3F9]/5 dark:from-[#3674B5]/10 dark:to-[#A1E3F9]/10 rounded-xl p-6 border border-[#3674B5]/20 dark:border-[#A1E3F9]/30">
+                                <h5 className="font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                                    <svg className="w-4 h-4 mr-2 text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Sejarah Singkat
+                                </h5>
+                                <div className="text-sm text-gray-700 dark:text-gray-300">
+                                    <p className="mb-2">
+                                        <strong>MAHAPENA</strong> merupakan singkatan dari <strong>Mahasiswa Pecinta Alam Fakultas Ekonomi Universitas Jember</strong>
+                                    </p>
+                                    <p>
+                                        Didirikan khusus untuk Mahasiswa Fakultas Ekonomi Universitas Jember pada <strong>14 Maret 1977</strong>, dengan komitmen untuk mengembangkan karakter mahasiswa melalui kegiatan pecinta alam.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <div className="p-6 pt-0 border-t border-gray-200 dark:border-slate-700">
+                    <button
+                        onClick={onClose}
+                        className="w-full px-6 py-3 bg-gradient-to-r from-[#3674B5] to-[#5682B1] hover:from-[#2d5a94] hover:to-[#4571a0] text-white font-medium rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Profil = () => {
     const [isVisible, setIsVisible] = useState(false);
 
@@ -15,6 +375,35 @@ const Profil = () => {
     const [pengurus, setPengurus] = useState([]);
 
     const [alumni, setAlumni] = useState([]);
+
+    // State untuk modal alumni
+    const [isAlumniModalOpen, setIsAlumniModalOpen] = useState(false);
+    const [selectedAlumni, setSelectedAlumni] = useState(null);
+
+    // State untuk modal logo
+    const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
+
+    // Fungsi untuk handle click alumni
+    const handleAlumniClick = (alumniData) => {
+        setSelectedAlumni(alumniData);
+        setIsAlumniModalOpen(true);
+    };
+
+    // Fungsi untuk menutup modal alumni
+    const closeAlumniModal = () => {
+        setIsAlumniModalOpen(false);
+        setSelectedAlumni(null);
+    };
+
+    // Fungsi untuk handle click logo
+    const handleLogoClick = () => {
+        setIsLogoModalOpen(true);
+    };
+
+    // Fungsi untuk menutup modal logo
+    const closeLogoModal = () => {
+        setIsLogoModalOpen(false);
+    };
 
     // Animasi fade-in
     useEffect(() => {
@@ -133,13 +522,16 @@ const Profil = () => {
                     <div className="absolute inset-0 bg-noise opacity-10 dark:opacity-20"></div>
                 </div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#A1E3F9] to-[#FFFFFF] dark:from-[#A1E3F9] dark:to-[#5682B1]">
-                        Profil Mahapena
-                    </h1>
-                    <p className="mt-6 text-xl md:text-xl max-w-3xl mx-auto text-[#A1E3F9]/90 dark:text-[#A1E3F9] drop-shadow-sm">
-                        Mengenal lebih dekat UKM Mahapena dan berbagai divisi yang membangun kreativitas mahasiswa
-                    </p>
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                    <div className="text-center">
+                        <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#A1E3F9] to-[#FFFFFF] dark:from-[#A1E3F9] dark:to-[#5682B1]">
+                            Profil Mahapena
+                        </h1>
+                        <p className="mt-6 text-xl md:text-xl max-w-3xl mx-auto text-[#A1E3F9]/90 dark:text-[#A1E3F9] drop-shadow-sm">
+                            Mari mengenal lebih dekat UKM Mahapena dan berbagai divisi  - divisinya
+                        </p>
+                    </div>
                 </div>
             </section>
 
@@ -163,7 +555,7 @@ const Profil = () => {
                             </h2>
                             <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
                             <p className="text-gray-600 dark:text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
-                                UKM Mahapena adalah Unit Kegiatan Mahasiswa yang fokus pada pengembangan kreativitas, inovasi, dan entrepreneurship mahasiswa
+                                Mahapena merupakan salah satu Unit Kegiatan Mahasiswa tingkat fakultas yang berdiri sejak 14 Maret 1977. Mahapena merupakan wadah bagi mahasiswa S1 Fakultas Ekonomi dan Bisnis Universitas Jember untuk berkegiatan di alam bebas, berkontribusi bagi masyarakat, serta peduli terhadap pelestarian lingkungan.
                             </p>
                         </div>
 
@@ -173,13 +565,13 @@ const Profil = () => {
                             <div className="grid grid-cols-2 gap-4 mb-8">
                                 <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-slate-700 text-center transform hover:scale-105 transition-all duration-300">
                                     <div className="text-2xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent mb-2">
-                                        2010
+                                        1977
                                     </div>
                                     <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">Tahun Berdiri</p>
                                 </div>
                                 <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-slate-700 text-center transform hover:scale-105 transition-all duration-300">
                                     <div className="text-2xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent mb-2">
-                                        1000+
+                                        600+
                                     </div>
                                     <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">Alumni</p>
                                 </div>
@@ -190,14 +582,14 @@ const Profil = () => {
                                 <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-slate-700 relative overflow-hidden">
                                     <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#3674B5] to-[#A1E3F9]"></div>
                                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-xl1 pl-6">
-                                        Didirikan tahun 2010, kami telah membantu ribuan mahasiswa mengembangkan potensi diri melalui berbagai program dan kegiatan yang dirancang untuk mengasah kemampuan soft skills dan hard skills yang dibutuhkan di dunia profesional.
+                                        Mahasiswa-FEB Unej didirikan pada tanggal 14 Maret 1977 yang diprakarsai M. Istiqlal (M. 010001) dan kawan kawan. Latar belakang pendirian Mahapena adalah mewadahai bakat minat mahasiwa FEB Unej yang pada waktu itu memiliki hobi jalan-jalan dan kepecintaalaman yang tinggi.
                                     </p>
                                 </div>
 
                                 <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-slate-700 relative overflow-hidden">
                                     <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#5682B1] to-[#3674B5]"></div>
                                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-xl1 pl-6">
-                                        Dengan semangat kolaborasi dan inovasi, Mahapena terus berkontribusi dalam menciptakan lingkungan yang mendukung pengembangan kreativitas mahasiswa.
+                                        Dengan kepercayaan tinggi, keberanian, dan semangat sebagai ujung tombaknya, Mahapena terus berkontribusi menciptakan mahasiswa yang akademis, pecinta lingkungan, dan terus berkontribusi terhadap masyarakat sekitar. Melalui program dan kegiatannya dirancang untuk mengasah kemampuan soft skill dan hard skill yang dibutuhkan di dunia profesional dimasa mendatang.
                                     </p>
                                 </div>
                             </div>
@@ -205,9 +597,9 @@ const Profil = () => {
                             {/* Feature highlights */}
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 {[
-                                    { icon: "🎨", title: "Kreativitas", desc: "Mengembangkan ide-ide inovatif" },
-                                    { icon: "🚀", title: "Inovasi", desc: "Mendorong solusi terdepan" },
-                                    { icon: "💼", title: "Entrepreneurship", desc: "Membangun jiwa wirausaha" }
+                                    { icon: "🎨", title: "Persaudaraan", desc: "Mrnjunjung tinggi nilai persaudaraan" },
+                                    { icon: "🚀", title: "Pengetahuan", desc: "Meningkatkan pengetahuan mahasiswa" },
+                                    { icon: "💼", title: "Keterampilan", desc: "Membentuk keterampilan mahasiswa" }
                                 ].map((item, index) => (
                                     <div key={index} className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-md border border-gray-100 dark:border-slate-700 text-center group hover:shadow-lg transition-all duration-300">
                                         <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">
@@ -224,43 +616,66 @@ const Profil = () => {
                             </div>
                         </div>
 
-                        {/* Image Side */}
+                        {/* Logo Side */}
                         <div className="zoom-in relative">
-                            <div className="relative group">
-                                <div className="absolute -inset-4 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] rounded-3xl blur-2xl opacity-30 group-hover:opacity-40 transition-opacity duration-500"></div>
-                                <div className="relative bg-white dark:bg-slate-800 p-4 rounded-3xl shadow-2xl">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                                        alt="Kegiatan Mahapena"
-                                        className="w-full h-80 object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500"
-                                    />
+                            <div className="relative group cursor-pointer" onClick={handleLogoClick}>
+                                <div className="relative bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-2xl">
+                                    <div className="w-full h-80 bg-gradient-to-br from-yellow-400 via-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform duration-500 shadow-inner">
+                                        <img
+                                            src="/logo.png"
+                                            alt="Logo MAHAPENA"
+                                            className="w-64 h-64 object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-300"
+                                            onError={(e) => {
+                                                // Fallback jika gambar tidak ditemukan
+                                                e.target.style.display = 'none';
+                                                e.target.nextSibling.style.display = 'flex';
+                                            }}
+                                        />
+                                        {/* Fallback content */}
+                                        <div className="hidden w-full h-full items-center justify-center text-white">
+                                            <div className="text-center">
+                                                <div className="text-4xl font-bold mb-4">MAHAPENA</div>
+                                                <div className="text-lg">Fakultas Ekonomi</div>
+                                                <div className="text-sm mt-2">Universitas Jember</div>
+                                                <div className="text-xs mt-4 opacity-75">Est. 1977</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="absolute bottom-6 left-6 right-6 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         <p className="text-sm font-medium text-gray-800 dark:text-white">
-                                            Kegiatan Mahapena
+                                            Logo MAHAPENA
                                         </p>
                                         <p className="text-xs text-gray-600 dark:text-gray-300">
-                                            Mengembangkan kreativitas bersama
+                                            Klik untuk melihat makna lambang
                                         </p>
                                     </div>
                                 </div>
-                                <div className="absolute -top-6 -right-6 w-12 h-12 bg-[#A1E3F9] rounded-full opacity-60 animate-pulse"></div>
-                                <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-[#3674B5] rounded-full opacity-40 animate-pulse" style={{ animationDelay: '1s' }}></div>
+                                <div className="absolute -top-6 -right-6 w-12 h-12 bg-yellow-400 rounded-full opacity-60 animate-pulse"></div>
+                                <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-orange-500 rounded-full opacity-40 animate-pulse" style={{ animationDelay: '1s' }}></div>
+
+                                {/* Click indicator */}
+                                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Visi & Misi */}
+                    {/* Dasar & Tujuan */}
                     <div className="space-y-16">
                         {/* Section Header */}
                         <div className="text-center zoom-in">
                             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent mb-4">
-                                Visi & Misi
+                                Dasar & Tujuan
                             </h2>
                             <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full"></div>
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                            {/* Visi Card */}
+                            {/* Dasar Card */}
                             <div className="zoom-in group">
                                 <div className="relative bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-slate-700 overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-br from-[#3674B5]/5 to-[#A1E3F9]/5 dark:from-[#3674B5]/10 dark:to-[#A1E3F9]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -268,27 +683,24 @@ const Profil = () => {
                                     <div className="relative z-10 flex items-center mb-8">
                                         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#3674B5] to-[#5682B1] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                                             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                             </svg>
                                         </div>
                                         <div className="ml-4">
-                                            <h3 className="text-2xl font-bold text-gray-800 dark:text-white">Visi</h3>
-                                            <p className="text-[#3674B5] dark:text-[#A1E3F9] font-medium">Pandangan Masa Depan</p>
+                                            <h3 className="text-2xl font-bold text-gray-800 dark:text-white">Dasar</h3>
                                         </div>
                                     </div>
 
                                     <div className="relative z-10">
                                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
-                                            Menjadi wadah utama pengembangan kreativitas dan inovasi mahasiswa
-                                            yang menghasilkan talenta-talenta unggul dan berkontribusi positif
-                                            bagi masyarakat dan bangsa.
+                                            Organisasi ini berdasarkan persaudaraan serta kecintaan terhadap terciptanya kelestarian alam semesta sebagai pencerminan mahasiswa yang taqwa terhadap Tuhan Yang Maha Pencipta.
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Misi Card */}
+                            {/* Tujuan Card */}
                             <div className="zoom-in group" style={{ transitionDelay: "200ms" }}>
                                 <div className="relative bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-slate-700 overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-br from-[#5682B1]/5 to-[#3674B5]/5 dark:from-[#5682B1]/10 dark:to-[#3674B5]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -296,38 +708,24 @@ const Profil = () => {
                                     <div className="relative z-10 flex items-center mb-8">
                                         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#5682B1] to-[#3674B5] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                                             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                             </svg>
                                         </div>
                                         <div className="ml-4">
-                                            <h3 className="text-2xl font-bold text-gray-800 dark:text-white">Misi</h3>
-                                            <p className="text-[#5682B1] dark:text-[#A1E3F9] font-medium">Rencana Strategis</p>
+                                            <h3 className="text-2xl font-bold text-gray-800 dark:text-white">Tujuan</h3>
                                         </div>
                                     </div>
 
                                     <div className="relative z-10">
-                                        <ul className="space-y-4">
-                                            {[
-                                                "Menyelenggarakan program pengembangan kreativitas dan inovasi",
-                                                "Membangun jiwa entrepreneurship mahasiswa",
-                                                "Berkontribusi positif bagi masyarakat melalui karya kreatif"
-                                            ].map((misi, index) => (
-                                                <li key={index} className="flex items-start group-hover:transform group-hover:translate-x-2 transition-transform duration-300" style={{ transitionDelay: `${index * 100}ms` }}>
-                                                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#5682B1] to-[#3674B5] flex items-center justify-center mt-0.5 mr-4 flex-shrink-0">
-                                                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <span className="text-gray-700 dark:text-gray-300 leading-relaxed">{misi}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                                            Terbinanya mahasiswa akademis, pecinta, pengabdi kepada bumi Indonesia beserta lingkungannya untuk lebih mendekatkan diri kepada Penciptanya.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    
                     {/* Divisi Kami */}
                     <div className="space-y-16">
                         {/* Section Header */}
@@ -337,7 +735,7 @@ const Profil = () => {
                             </h2>
                             <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
                             <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
-                                Jelajahi berbagai divisi yang membentuk ekosistem kreativitas dan inovasi UKM Mahapena
+                                Jelajahi berbagai divisi yang membentuk Pengetahuan dan Keterampilan Anggota
                             </p>
                         </div>
 
@@ -473,7 +871,7 @@ const Profil = () => {
                     </div>
                 </div>
             )}
-            
+
             {/* Pengurus & Alumni Section */}
             <section className="py-16 bg-gradient-to-br from-slate-50 via-white to-blue-50/20 dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 relative overflow-hidden">
                 {/* Background Elements */}
@@ -492,7 +890,7 @@ const Profil = () => {
                             </h2>
                             <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
                             <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
-                                Kenali para pengurus UKM Mahapena yang berdedikasi dalam mengembangkan kreativitas dan inovasi mahasiswa
+                                Kenali para pengurus UKM Mahapena-FEB Unej yang berdedikasi dalam mengembangkan Pengetahuan dan Keterampilan mahasiswa
                             </p>
                         </div>
 
@@ -654,7 +1052,7 @@ const Profil = () => {
                             </h2>
                             <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
                             <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
-                                Kenali para alumni UKM Mahapena yang telah berkontribusi dan melanjutkan perjalanan kreatif mereka
+                                Kenali para alumni Anggota luar biasa yang telah berkontribusi dan melanjutkan perjalanan kreatif mereka
                             </p>
                         </div>
 
@@ -682,7 +1080,11 @@ const Profil = () => {
                             ) : (
                                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                                     {alumni.map((a) => (
-                                        <div key={a.id} className="group bg-white/70 dark:bg-slate-700/80 backdrop-blur-sm rounded-2xl p-3 lg:p-6 border border-gray-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-105">
+                                        <div
+                                            key={a.id}
+                                            onClick={() => handleAlumniClick(a)}
+                                            className="group bg-white/70 dark:bg-slate-700/80 backdrop-blur-sm rounded-2xl p-3 lg:p-6 border border-gray-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-105 cursor-pointer"
+                                        >
                                             {/* Foto Alumni - Portrait dengan Overlay */}
                                             <div className="relative mb-3 lg:mb-4">
                                                 <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg border-3 border-[#5682B1] group-hover:border-[#A1E3F9] transition-all duration-300">
@@ -707,11 +1109,11 @@ const Profil = () => {
                                                         </div>
                                                     )}
 
-                                                    {/* Badge Divisi di pojok kanan atas */}
-                                                    {a.divisi && (
+                                                    {/* Badge Pekerjaan di pojok kanan atas */}
+                                                    {a.pekerjaan && (
                                                         <div className="absolute top-2 lg:top-3 right-2 lg:right-3">
                                                             <span className="px-2 lg:px-3 py-1 text-xs font-semibold text-white bg-[#5682B1]/80 rounded-full shadow-md border border-[#5682B1]/30">
-                                                                {a.divisi}
+                                                                {a.pekerjaan}
                                                             </span>
                                                         </div>
                                                     )}
@@ -728,17 +1130,25 @@ const Profil = () => {
                                                             {a.prodi} ({a.angkatan})
                                                         </p>
                                                     </div>
+
+                                                    {/* Click indicator */}
+                                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20">
+                                                        <div className="bg-white/90 rounded-full p-3 transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                                                            <svg className="w-6 h-6 text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            {/* Jabatan - hanya jika ada */}
-                                            {a.jabatan && (
-                                                <div className="text-center">
-                                                    <div className="inline-block">
-                                                        <span className="px-2 lg:px-3 py-1 text-xs lg:text-sm font-semibold text-[#5682B1] dark:text-[#A1E3F9] bg-[#5682B1]/10 dark:bg-[#A1E3F9]/10 rounded-full border border-[#5682B1]/20 dark:border-[#A1E3F9]/20 group-hover:bg-[#5682B1] group-hover:text-white dark:group-hover:bg-[#A1E3F9] dark:group-hover:text-slate-800 transition-all duration-300">
-                                                            {a.jabatan}
-                                                        </span>
-                                                    </div>
+                                            {/* Deskripsi Preview - hanya jika ada dan singkat */}
+                                            {a.deskripsi && (
+                                                <div className="text-center mt-2">
+                                                    <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                                                        {a.deskripsi}
+                                                    </p>
                                                 </div>
                                             )}
 
@@ -752,7 +1162,21 @@ const Profil = () => {
                     </div>
                 </div>
             </section>
-            <style jsx>{`
+
+            {/* Modal Alumni Detail */}
+            <AlumniDetailModal
+                isOpen={isAlumniModalOpen}
+                onClose={closeAlumniModal}
+                alumni={selectedAlumni}
+            />
+
+            {/* Modal Logo MAHAPENA */}
+            <LogoModal
+                isOpen={isLogoModalOpen}
+                onClose={closeLogoModal}
+            />
+
+            <style>{`
                 .slide-in-left {
                     opacity: 0;
                     transform: translateX(-30px);
@@ -806,6 +1230,13 @@ const Profil = () => {
                 .pattern-dots {
                     background-image: radial-gradient(currentColor 1px, transparent 1px);
                     background-size: 10px 10px;
+                }
+                
+                .line-clamp-2 {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
                 }
                 
                 .line-clamp-3 {

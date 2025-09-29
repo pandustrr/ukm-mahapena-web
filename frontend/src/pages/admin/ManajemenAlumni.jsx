@@ -22,9 +22,8 @@ function ManajemenAlumni() {
     nama: "",
     prodi: "",
     angkatan: "",
-    jabatan: "",
-    divisi: "",
-    periode: "",
+    pekerjaan: "",
+    deskripsi: "",
     foto: null,
   });
   const [editingId, setEditingId] = useState(null);
@@ -174,9 +173,8 @@ function ManajemenAlumni() {
       form.append("nama", formData.nama);
       form.append("prodi", formData.prodi);
       form.append("angkatan", formData.angkatan);
-      form.append("jabatan", formData.jabatan);
-      form.append("divisi", formData.divisi);
-      form.append("periode", formData.periode);
+      form.append("pekerjaan", formData.pekerjaan);
+      form.append("deskripsi", formData.deskripsi);
       if (formData.foto) form.append("foto", formData.foto);
 
       if (editingId) {
@@ -201,9 +199,8 @@ function ManajemenAlumni() {
         nama: "",
         prodi: "",
         angkatan: "",
-        jabatan: "",
-        divisi: "",
-        periode: "",
+        pekerjaan: "",
+        deskripsi: "",
         foto: null,
       });
       setEditingId(null);
@@ -223,9 +220,8 @@ function ManajemenAlumni() {
       nama: item.nama,
       prodi: item.prodi,
       angkatan: item.angkatan,
-      jabatan: item.jabatan,
-      divisi: item.divisi,
-      periode: item.periode,
+      pekerjaan: item.pekerjaan,
+      deskripsi: item.deskripsi,
       foto: null,
     });
     setPreviewImage(item.foto ? `http://localhost:8000/storage/${item.foto}` : null);
@@ -258,9 +254,8 @@ function ManajemenAlumni() {
       nama: "",
       prodi: "",
       angkatan: "",
-      jabatan: "",
-      divisi: "",
-      periode: "",
+      pekerjaan: "",
+      deskripsi: "",
       foto: null,
     });
     setPreviewImage(null);
@@ -318,28 +313,24 @@ function ManajemenAlumni() {
           />
           <input
             type="text"
-            name="jabatan"
-            placeholder="Jabatan"
-            value={formData.jabatan}
+            name="pekerjaan"
+            placeholder="Pekerjaan"
+            value={formData.pekerjaan}
             onChange={handleChange}
             className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
           />
-          <input
-            type="text"
-            name="divisi"
-            placeholder="Divisi"
-            value={formData.divisi}
-            onChange={handleChange}
-            className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-          />
-          <input
-            type="text"
-            name="periode"
-            placeholder="Periode"
-            value={formData.periode}
-            onChange={handleChange}
-            className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-          />
+          
+          {/* Deskripsi dengan textarea untuk menampung teks lebih panjang */}
+          <div className="md:col-span-2">
+            <textarea
+              name="deskripsi"
+              placeholder="Deskripsi (riwayat pekerjaan, prestasi, dll.)"
+              value={formData.deskripsi}
+              onChange={handleChange}
+              rows={3}
+              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 resize-none"
+            />
+          </div>
           
           {/* File Upload with Preview */}
           <div className="md:col-span-2">
@@ -420,9 +411,8 @@ function ManajemenAlumni() {
                 <th className="px-4 py-3 text-left font-medium text-gray-700">Nama</th>
                 <th className="px-4 py-3 text-left font-medium text-gray-700">Program Studi</th>
                 <th className="px-4 py-3 text-left font-medium text-gray-700">Angkatan</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-700">Jabatan</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-700">Divisi</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-700">Periode</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">Pekerjaan</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">Deskripsi</th>
                 <th className="px-4 py-3 text-center font-medium text-gray-700">Aksi</th>
               </tr>
             </thead>
@@ -457,9 +447,12 @@ function ManajemenAlumni() {
                       <td className="px-4 py-3 text-gray-800 font-medium">{item.nama}</td>
                       <td className="px-4 py-3 text-gray-600">{item.prodi}</td>
                       <td className="px-4 py-3 text-gray-600">{item.angkatan}</td>
-                      <td className="px-4 py-3 text-gray-600">{item.jabatan}</td>
-                      <td className="px-4 py-3 text-gray-600">{item.divisi}</td>
-                      <td className="px-4 py-3 text-gray-600">{item.periode}</td>
+                      <td className="px-4 py-3 text-gray-600">{item.pekerjaan}</td>
+                      <td className="px-4 py-3 text-gray-600">
+                        <div className="max-w-xs truncate" title={item.deskripsi}>
+                          {item.deskripsi}
+                        </div>
+                      </td>
                       <td className="px-4 py-3 text-center">
                         <div className="flex justify-center gap-2">
                           <button
@@ -488,7 +481,7 @@ function ManajemenAlumni() {
                 })
               ) : (
                 <tr>
-                  <td colSpan="8" className="px-4 py-6 text-center text-gray-500">
+                  <td colSpan="7" className="px-4 py-6 text-center text-gray-500">
                     Belum ada data alumni
                   </td>
                 </tr>

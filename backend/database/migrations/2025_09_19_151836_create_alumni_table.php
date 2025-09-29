@@ -12,9 +12,8 @@ return new class extends Migration {
             $table->string('nama');
             $table->string('prodi');
             $table->string('angkatan');
-            $table->string('jabatan')->nullable();
-            $table->string('divisi')->nullable();
-            $table->string('periode')->nullable();
+            $table->string('pekerjaan')->nullable();
+            $table->text('deskripsi')->nullable();
             $table->string('foto')->nullable();
             $table->timestamps();
         });
