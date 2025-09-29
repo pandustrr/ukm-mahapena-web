@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import API_URL from "../../config/api"; 
 
 export default function AdminLogin() {
     const [username, setUsername] = useState("");
@@ -14,12 +15,11 @@ export default function AdminLogin() {
         setMsg("");
 
         try {
-            const res = await axios.post("http://localhost:8000/api/admin/login", {
+            const res = await axios.post(`${API_URL}/admin/login`, {
                 username,
                 password,
             });
 
-            // Simpan token di sessionStorage
             sessionStorage.setItem("adminToken", res.data.token);
 
             // Simpan data admin di sessionStorage supaya bisa dipakai sidebar/ubah profil
@@ -28,7 +28,6 @@ export default function AdminLogin() {
                 JSON.stringify({
                     username: res.data.username, // pastikan API login mengembalikan username
                     email: res.data.email || "",  // opsional
-                    // tambahkan field lain kalau perlu
                 })
             );
 
