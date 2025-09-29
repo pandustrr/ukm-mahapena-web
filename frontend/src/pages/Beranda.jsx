@@ -117,11 +117,10 @@ const Beranda = ({ setCurrentPage }) => {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <h1
-            className={`text-3xl md:text-4xl lg:text-6xl font-bold mb-6 text-white transform transition-all duration-1000 ${
-              isVisible
+            className={`text-3xl md:text-4xl lg:text-6xl font-bold mb-6 text-white transform transition-all duration-1000 ${isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-10 opacity-0"
-            }`}
+              }`}
           >
             Selamat Datang di{" "}
             <span className="bg-gradient-to-r from-[#A1E3F9] to-[#FFFFFF] bg-clip-text text-transparent">
@@ -134,31 +133,26 @@ const Beranda = ({ setCurrentPage }) => {
             lingkungan hidup.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button
-              onClick={() => {
-                setCurrentPage("Profil"); // Pindah ke halaman Profil
-                window.scrollTo(0, 0); // Scroll ke atas
-              }}
-              className="group relative overflow-hidden px-8 py-3 rounded-xl font-semibold
-                                    transition-all duration-300 flex items-center justify-center gap-2
-                                    backdrop-blur-sm
-
-                                    /* Light mode */
-                                    bg-white/10 text-white border border-white/50
-                                    hover:bg-[#3674B5]/90 hover:text-white hover:border-[#3674B5]
-
-                                    /* Dark mode */
-                                    dark:bg-white/5 dark:text-[#A1E3F9] dark:border-[#A1E3F9]/50
-                                    dark:hover:bg-[#3674B5]/80 dark:hover:text-white"
-            >
-              {/* Efek shine */}
-              <span
-                className="absolute inset-0 -translate-x-full 
-                                            bg-gradient-to-r from-transparent via-white/20 to-transparent
-                                            transition-transform duration-500 group-hover:translate-x-full"
-              ></span>
-              Profil
-            </button>
+            <Link to="/profil">
+              <button
+                onClick={() => window.scrollTo(0, 0)} // scroll ke atas tetap boleh
+                className="group relative overflow-hidden px-8 py-3 rounded-xl font-semibold
+                 transition-all duration-300 flex items-center justify-center gap-2
+                 backdrop-blur-sm
+                 bg-white/10 text-white border border-white/50
+                 hover:bg-[#3674B5]/90 hover:text-white hover:border-[#3674B5]
+                 dark:bg-white/5 dark:text-[#A1E3F9] dark:border-[#A1E3F9]/50
+                 dark:hover:bg-[#3674B5]/80 dark:hover:text-white"
+              >
+                {/* Efek shine */}
+                <span
+                  className="absolute inset-0 -translate-x-full 
+                   bg-gradient-to-r from-transparent via-white/20 to-transparent
+                   transition-transform duration-500 group-hover:translate-x-full"
+                ></span>
+                Profil
+              </button>
+            </Link>
           </div>
         </div>
         {/* Smooth Wave Transition */}
