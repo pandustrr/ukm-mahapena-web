@@ -5,7 +5,11 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:5173'], // <-- alamat frontend
+    'allowed_origins' => [
+        'http://localhost:5173',      // untuk development lokal
+        'https://mahapena.ac.id',     // untuk production frontend
+    ],
+
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
