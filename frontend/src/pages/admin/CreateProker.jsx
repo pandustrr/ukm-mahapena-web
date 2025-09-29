@@ -163,9 +163,9 @@ function CreateProker() {
             <option value="" disabled>
               Pilih Status
             </option>
-            <option value="Pending">Pending</option>
-            <option value="Berjalan">Berjalan</option>
-            <option value="Selesai">Selesai</option>
+            <option value="pending">Pending</option>
+            <option value="berjalan">Berjalan</option>
+            <option value="selesai">Selesai</option>
           </select>
         </div>
 
