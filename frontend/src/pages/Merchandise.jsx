@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL, STORAGE_URL } from "../config/api";
 
 const Merchandise = () => {
   // const tokenAdmin = localStorage.getItem('tokenAdmin');
@@ -74,7 +75,7 @@ const Merchandise = () => {
     try {
       // 1. Kurangi stok di backend
       const response = await fetch(
-        `http://localhost:8000/api/merchandise/${selectedProduct.id}/decrease-stock-public`,
+        `${API_URL}/merchandise/${selectedProduct.id}/decrease-stock-public`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -131,7 +132,7 @@ const Merchandise = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/categories");
+        const res = await axios.get(`${API_URL}/categories`);
         const categoriesFromApi = res.data;
         setCategories([{ id: "all", name: "Semua" }, ...categoriesFromApi]);
       } catch (err) {
@@ -145,7 +146,7 @@ const Merchandise = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/merchandises");
+        const res = await axios.get(`${API_URL}/merchandises`);
         setProducts(res.data);
       } catch (err) {
         console.error("Gagal ambil produk:", err);
@@ -418,7 +419,7 @@ const Merchandise = () => {
                   {/* Image Container */}
                   <div className="relative h-32 md:h-48 overflow-hidden rounded-t-2xl">
                     <img
-                      src={`http://localhost:8000/storage/${product.image}`}
+                      src={`${STORAGE_URL}/${product.image}`}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
@@ -622,7 +623,7 @@ const Merchandise = () => {
             <div className="md:w-2/5 bg-gray-100 dark:bg-slate-800 p-4 flex items-center justify-center">
               <div className="aspect-square w-full rounded-xl overflow-hidden">
                 <img
-                  src={`http://localhost:8000/storage/${selectedProduct.image}`}
+                  src={`${STORAGE_URL}/${selectedProduct.image}`}
                   alt={selectedProduct.name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -746,7 +747,7 @@ const Merchandise = () => {
                     {/* Product Info - untuk mobile, gambar disembunyikan karena sudah ada di samping */}
                     <div className="md:hidden aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-800 mb-3">
                       <img
-                        src={`http://localhost:8000/storage/${selectedProduct.image}`}
+                        src={`${STORAGE_URL}/${selectedProduct.image}`}
                         alt={selectedProduct.name}
                         className="w-full h-full object-cover"
                         onError={(e) => {
@@ -840,7 +841,7 @@ const Merchandise = () => {
                       <div className="flex items-center space-x-2">
                         <div className="w-10 h-10 rounded-lg overflow-hidden bg-white dark:bg-slate-700">
                           <img
-                            src={`http://localhost:8000/storage/${selectedProduct.image}`}
+                            src={`${STORAGE_URL}/${selectedProduct.image}`}
                             alt={selectedProduct.name}
                             className="w-full h-full object-cover"
                           />

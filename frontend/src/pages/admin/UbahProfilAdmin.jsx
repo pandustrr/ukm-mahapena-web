@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Save, Lock, User, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
+import { API_URL } from "../../config/api"; 
 
 function UbahProfilAdmin() {
     const [currentUsername, setCurrentUsername] = useState(""); // Username saat ini
@@ -21,7 +22,7 @@ function UbahProfilAdmin() {
         const fetchAdmin = async () => {
             try {
                 const token = sessionStorage.getItem("adminToken");
-                const res = await fetch("http://localhost:8000/api/admin/profile", {
+                const res = await fetch(`${API_URL}/admin/profile`, {
                     headers: { Authorization: token },
                 });
                 const data = await res.json();
@@ -52,7 +53,7 @@ function UbahProfilAdmin() {
 
         try {
             const token = sessionStorage.getItem("adminToken");
-            const res = await fetch("http://localhost:8000/api/admin/update-profile", {
+            const res = await fetch(`${API_URL}/admin/update-profile`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

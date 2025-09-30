@@ -15,6 +15,7 @@ import {
   Upload,
   GraduationCap
 } from "lucide-react";
+import { API_URL, STORAGE_URL } from "../../config/api"; 
 
 function ManajemenAlumni() {
   const [alumnis, setAlumnis] = useState([]);
@@ -37,7 +38,7 @@ function ManajemenAlumni() {
 
   const token = sessionStorage.getItem("adminToken");
   const api = axios.create({
-    baseURL: "http://localhost:8000/api/admin",
+    baseURL: `${API_URL}/admin`,
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -224,7 +225,7 @@ function ManajemenAlumni() {
       deskripsi: item.deskripsi,
       foto: null,
     });
-    setPreviewImage(item.foto ? `http://localhost:8000/storage/${item.foto}` : null);
+    setPreviewImage(item.foto ? `${STORAGE_URL}/${item.foto}` : null);
     setEditingId(item.id);
   };
 
@@ -434,7 +435,7 @@ function ManajemenAlumni() {
                       <td className="px-4 py-3">
                         {item.foto ? (
                           <img
-                            src={`http://localhost:8000/storage/${item.foto}`}
+                            src={`${STORAGE_URL}/${item.foto}`}
                             alt={item.nama}
                             className="w-10 h-10 object-cover rounded-full"
                           />

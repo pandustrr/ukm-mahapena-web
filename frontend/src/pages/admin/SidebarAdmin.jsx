@@ -14,6 +14,7 @@ import {
   UserCircle2,
   Settings,
 } from "lucide-react";
+import {API_URL} from "../../config/api"; 
 
 function SidebarAdmin({ activePage, setActivePage }) {
   const [profilOpen, setProfilOpen] = useState(false);
@@ -26,7 +27,7 @@ function SidebarAdmin({ activePage, setActivePage }) {
         const token = sessionStorage.getItem("adminToken");
         if (!token) return;
 
-        const res = await fetch("http://localhost:8000/api/admin/dashboard", {
+        const res = await fetch(`${API_URL}/admin/dashboard`, {
           headers: {
             Authorization: token,
           },

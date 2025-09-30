@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { X, Loader } from "lucide-react";
+import { API_URL, STORAGE_URL } from "../config/api";
 
 const Proker = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -34,7 +35,7 @@ const Proker = () => {
       try {
         setLoading(true);
 
-        const res = await axios.get("http://localhost:8000/api/public/proker");
+        const res = await axios.get(`${API_URL}/public/proker`);
         setProker(res.data); // BUKAN res.data.data
 
         setProker(res.data || []);
@@ -167,7 +168,7 @@ const Proker = () => {
                         <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden bg-gradient-to-br from-[#3674B5]/10 to-[#A1E3F9]/10 flex items-center justify-center group-hover:from-[#3674B5]/20 group-hover:to-[#A1E3F9]/20 transition-all duration-300">
                           {item.featured_image ? (
                             <img
-                              src={`http://localhost:8000/storage/${item.featured_image}`}
+                              src={`${STORAGE_URL}/${item.featured_image}`}
                               alt={item.nama}
                               className="w-full h-full object-cover"
                               onError={(e) => {
@@ -242,7 +243,7 @@ const Proker = () => {
               {/* Image */}
               {selectedProker.gambar ? (
                 <img
-                  src={`http://localhost:8000/storage/${selectedProker.gambar}`}
+                  src={`${STORAGE_URL}/${selectedProker.gambar}`}
                   alt={selectedProker.nama}
                   className="w-full h-64 object-cover rounded-xl mb-6 shadow-lg"
                   onError={(e) => {

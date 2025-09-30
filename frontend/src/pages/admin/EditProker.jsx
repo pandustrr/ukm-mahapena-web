@@ -13,6 +13,7 @@ import {
   AlertTriangle,
   Image,
 } from "lucide-react";
+import { API_URL, STORAGE_URL } from "../../config/api"; 
 
 function EditProker() {
   const [loading, setLoading] = useState(false);
@@ -105,7 +106,7 @@ function EditProker() {
     const fetchProker = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/admin/proker/${id}`,
+          `${API_URL}/admin/proker/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -120,7 +121,7 @@ function EditProker() {
         });
         // set preview ke gambar lama
         if (proker.featured_image) {
-          setPreview(`http://localhost:8000/storage/${proker.featured_image}`);
+          setPreview(`${STORAGE_URL}/${proker.featured_image}`);
         }
       } catch (err) {
         console.error("Gagal mengambil data proker", err);
@@ -166,7 +167,7 @@ function EditProker() {
       payload.append("_method", "PUT");
 
       await axios.post(
-        `http://localhost:8000/api/admin/proker/${id}`,
+        `${API_URL}/admin/proker/${id}`,
         payload,
         {
           headers: {

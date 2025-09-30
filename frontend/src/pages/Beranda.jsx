@@ -10,6 +10,8 @@ import {
   Heart,
   Loader,
 } from "lucide-react";
+import { API_URL, STORAGE_URL} from "../config/api"; 
+
 
 const Beranda = ({ setCurrentPage }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -42,7 +44,7 @@ const Beranda = ({ setCurrentPage }) => {
     const fetchProker = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:8000/api/public/proker");
+        const res = await axios.get(`${API_URL}/public/proker`);
         console.log(res.data);
         setProker(res.data);
       } catch (err) {
@@ -60,7 +62,7 @@ const Beranda = ({ setCurrentPage }) => {
       try {
         setLoading(true);
 
-        const res = await axios.get("http://localhost:8000/api/blogs");
+        const res = await axios.get(`${API_URL}/blogs`);
         const payload = res.data;
         let list = [];
 
@@ -278,7 +280,7 @@ const Beranda = ({ setCurrentPage }) => {
                       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#3674B5]/10 to-[#A1E3F9]/20">
                         {item.featured_image ? (
                           <img
-                            src={`http://localhost:8000/storage/${item.featured_image}`}
+                            src={`${STORAGE_URL}/${item.featured_image}`}
                             alt={item.nama}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
@@ -373,7 +375,7 @@ const Beranda = ({ setCurrentPage }) => {
                 <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#3674B5]/10 to-[#A1E3F9]/20">
                   {article.featured_image ? (
                     <img
-                      src={`http://localhost:8000/storage/${article.featured_image}`}
+                      src={`${STORAGE_URL}/${article.featured_image}`}
                       alt={article.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />

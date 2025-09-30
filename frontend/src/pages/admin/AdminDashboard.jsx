@@ -8,6 +8,7 @@ import ManajemenAlumni from "./ManajemenAlumni";
 import ManajemenBlog from "./ManajemenBlog";
 import ManajemenProker from "./ManajemenProker";
 import UbahProfilAdmin from "./UbahProfilAdmin";
+import { API_URL } from "../../config/api"; 
 
 import {
   Layers,
@@ -58,14 +59,14 @@ function DashboardContent({ setActivePage }) {
           merchandiseRes,
           salesRes
         ] = await Promise.all([
-          fetch("http://localhost:8000/api/admin/divisis", { headers }),
-          fetch("http://localhost:8000/api/admin/pengurus", { headers }),
-          fetch("http://localhost:8000/api/admin/alumni", { headers }),
-          fetch("http://localhost:8000/api/admin/proker", { headers }),
-          fetch("http://localhost:8000/api/admin/blogs", { headers }),
-          fetch("http://localhost:8000/api/admin/portofolio", { headers }),
-          fetch("http://localhost:8000/api/admin/merchandises", { headers }),
-          fetch("http://localhost:8000/api/admin/merchandise-sales", { headers })
+          fetch(`${API_URL}/admin/divisis`, { headers }),
+          fetch(`${API_URL}/admin/pengurus`, { headers }),
+          fetch(`${API_URL}/admin/alumni`, { headers }),
+          fetch(`${API_URL}/admin/proker`, { headers }),
+          fetch(`${API_URL}/admin/blogs`, { headers }),
+          fetch(`${API_URL}/admin/portofolio`, { headers }),
+          fetch(`${API_URL}/admin/merchandises`, { headers }),
+          fetch(`${API_URL}/admin/merchandise-sales`, { headers })
         ]);
 
         const divisiData = await divisiRes.json();

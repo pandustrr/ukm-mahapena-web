@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Editor } from "@tinymce/tinymce-react";
+import { API_URL, STORAGE_URL } from "../../config/api";
 
 import "tinymce/tinymce"; // core
 import "tinymce/icons/default";
@@ -83,7 +84,7 @@ function EditBlog() {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/categories")
+      .get(`${API_URL}/categories`)
       .then((res) => setCategories(res.data.data || res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -92,7 +93,7 @@ function EditBlog() {
     const fetchBlog = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/admin/blogs/${id}`,
+          `${API_URL}/admin/blogs/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -108,7 +109,7 @@ function EditBlog() {
         });
         // set preview ke gambar lama
         if (blog.featured_image) {
-          setPreview(`http://localhost:8000/storage/${blog.featured_image}`);
+          setPreview(`${STORAGE_URL}/${blog.featured_image}`);
         }
       } catch (err) {
         console.error("Gagal mengambil data blog", err);
@@ -152,7 +153,7 @@ function EditBlog() {
       // gunakan method override supaya Laravel menerima sebagai PUT
       payload.append("_method", "PUT");
 
-      await axios.post(`http://localhost:8000/api/admin/blogs/${id}`, payload, {
+      await axios.post(`${API_URL}/admin/blogs/${id}`, payload, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

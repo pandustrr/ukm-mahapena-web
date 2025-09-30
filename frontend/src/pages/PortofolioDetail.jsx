@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ArrowLeft } from "lucide-react";
+import { API_URL, STORAGE_URL } from "../config/api";
 
 const PortofolioDetail = () => {
     const { id } = useParams();
@@ -10,7 +11,7 @@ const PortofolioDetail = () => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8000/api/portofolio/${id}`)
+            .get(`${API_URL}/portofolio/${id}`)
             .then((res) => setData(res.data))
             .catch((err) => console.error("Gagal ambil detail:", err));
     }, [id]);
@@ -62,7 +63,7 @@ const PortofolioDetail = () => {
                     {data.gambar && (
                         <div className="relative">
                             <img
-                                src={`http://localhost:8000/storage/${data.gambar}`}
+                                src={`${STORAGE_URL}/${data.gambar}`}
                                 alt={data.judul}
                                 className="w-full h-64 md:h-96 object-cover"
                                 onError={(e) => {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL, STORAGE_URL } from "../config/api";
 
 // Modal Component untuk detail alumni
 const AlumniDetailModal = ({ isOpen, onClose, alumni }) => {
@@ -41,7 +42,7 @@ const AlumniDetailModal = ({ isOpen, onClose, alumni }) => {
             <div className="relative w-20 h-20 rounded-2xl overflow-hidden shadow-lg border-2 border-[#5682B1]">
               {alumni.foto ? (
                 <img
-                  src={`http://localhost:8000/storage/${alumni.foto}`}
+                  src={`${STORAGE_URL}/${alumni.foto}`}
                   alt={alumni.nama}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -555,7 +556,7 @@ const Profil = () => {
   useEffect(() => {
     const fetchDivisi = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/divisi");
+        const res = await fetch(`${API_URL}/divisi`);
         const data = await res.json();
         setDivisi(data);
       } catch (error) {
@@ -570,7 +571,7 @@ const Profil = () => {
     const fetchPeriodes = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/periodes-with-pengurus-public"
+          `${API_URL}/periodes-with-pengurus-public`
         );
         setPeriodes(res.data);
 
@@ -590,7 +591,7 @@ const Profil = () => {
       if (!selectedPeriode) return;
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/divisi/periode/${selectedPeriode}`
+          `${API_URL}/divisi/periode/${selectedPeriode}`
         );
         setDivisisPengurus(res.data);
 
@@ -616,7 +617,7 @@ const Profil = () => {
           params.divisi_id = selectedDivisiPengurus;
 
         const res = await axios.get(
-          "http://localhost:8000/api/pengurus-public",
+          `${API_URL}/pengurus-public`,
           { params }
         );
         setPengurus(res.data);
@@ -631,7 +632,7 @@ const Profil = () => {
   useEffect(() => {
     const fetchAlumni = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/alumni");
+        const res = await axios.get(`${API_URL}/alumni`);
         setAlumni(res.data);
       } catch (err) {
         console.error("Gagal ambil alumni:", err);
@@ -1265,7 +1266,7 @@ const Profil = () => {
                           {p.foto ? (
                             <>
                               <img
-                                src={`http://localhost:8000/storage/${p.foto}`}
+                                src={`${STORAGE_URL}/${p.foto}`}
                                 alt={p.nama}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                                 onError={(e) => {
@@ -1388,7 +1389,7 @@ const Profil = () => {
                           {a.foto ? (
                             <>
                               <img
-                                src={`http://localhost:8000/storage/${a.foto}`}
+                                src={`${STORAGE_URL}/${a.foto}`}
                                 alt={a.nama}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                                 onError={(e) => {

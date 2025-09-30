@@ -15,6 +15,7 @@ import {
     XCircle,
     Info
 } from "lucide-react";
+import { API_URL } from "../../config/api"; 
 
 // Pindahkan ConfirmationModal ke luar komponen utama
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = "warning", confirmText, cancelText, isLoading }) => {
@@ -139,7 +140,7 @@ function ManajemenDivisi() {
     // ====== FETCH DATA ======
     const fetchDivisis = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/api/admin/divisis", {
+            const res = await axios.get(`${API_URL}/admin/divisis`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setDivisis(res.data);
@@ -151,7 +152,7 @@ function ManajemenDivisi() {
 
     const fetchPeriodes = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/api/admin/periodes", {
+            const res = await axios.get(`${API_URL}/admin/periodes`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setPeriodes(res.data);
@@ -199,14 +200,14 @@ function ManajemenDivisi() {
 
             if (formDivisi.id) {
                 await axios.put(
-                    `http://localhost:8000/api/admin/divisis/${formDivisi.id}`,
+                    `${API_URL}/admin/divisis/${formDivisi.id}`,
                     payload,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 alert("Divisi berhasil diperbarui");
                 resetDivisi();
             } else {
-                await axios.post("http://localhost:8000/api/admin/divisis", payload, {
+                await axios.post(`${API_URL}/admin/divisis`, payload, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert("Divisi berhasil ditambahkan");
@@ -256,14 +257,14 @@ function ManajemenDivisi() {
         try {
             if (formPeriode.id) {
                 await axios.put(
-                    `http://localhost:8000/api/admin/periodes/${formPeriode.id}`,
+                    `${API_URL}/admin/periodes/${formPeriode.id}`,
                     formPeriode,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 alert("Periode berhasil diperbarui");
                 resetPeriode();
             } else {
-                await axios.post("http://localhost:8000/api/admin/periodes", formPeriode, {
+                await axios.post(`${API_URL}/admin/periodes`, formPeriode, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert("Periode berhasil ditambahkan");
@@ -303,13 +304,13 @@ function ManajemenDivisi() {
         setIsDeleting(true);
         try {
             if (deleteTarget.type === 'divisi') {
-                await axios.delete(`http://localhost:8000/api/admin/divisis/${deleteTarget.id}`, {
+                await axios.delete(`${API_URL}/admin/divisis/${deleteTarget.id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert("Divisi berhasil dihapus");
                 fetchDivisis();
             } else {
-                await axios.delete(`http://localhost:8000/api/admin/periodes/${deleteTarget.id}`, {
+                await axios.delete(`${API_URL}/admin/periodes/${deleteTarget.id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert("Periode berhasil dihapus");

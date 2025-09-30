@@ -16,6 +16,7 @@ import {
   Image,
   Upload
 } from "lucide-react";
+import { API_URL, STORAGE_URL } from "../../config/api"; 
 
 function ManajemenPengurus() {
   const [pengurus, setPengurus] = useState([]);
@@ -46,7 +47,7 @@ function ManajemenPengurus() {
 
   const token = sessionStorage.getItem("adminToken");
   const api = axios.create({
-    baseURL: "http://localhost:8000/api/admin",
+    baseURL: `${API_URL}/admin`,
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -244,7 +245,7 @@ function ManajemenPengurus() {
       angkatan: p.angkatan,
       foto: null,
     });
-    setPreviewImage(p.foto ? `http://localhost:8000/storage/${p.foto}` : null);
+    setPreviewImage(p.foto ? `${STORAGE_URL}/${p.foto}` : null);
     setIsEditing(true);
   };
 
@@ -530,7 +531,7 @@ function ManajemenPengurus() {
                       <td className="px-4 py-3">
                         {p.foto ? (
                           <img
-                            src={`http://localhost:8000/storage/${p.foto}`}
+                            src={`${STORAGE_URL}/${p.foto}`}
                             alt={p.nama}
                             className="w-10 h-10 object-cover rounded-full"
                           />

@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowLeft, Loader } from "lucide-react";
+import { API_URL, STORAGE_URL} from "../config/api";
 
 export default function BlogDetail() {
     const { id } = useParams();
@@ -12,7 +13,7 @@ export default function BlogDetail() {
         const fetchBlog = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get(`http://localhost:8000/api/blogs/${id}`);
+                const res = await axios.get(`${API_URL}/blogs/${id}`);
                 const blog = res.data.data;
                 setBlog(blog);
             } catch (err) {
@@ -93,7 +94,7 @@ export default function BlogDetail() {
                     {/* Featured Image */}
                     <div className="relative">
                         <img
-                            src={`http://localhost:8000/storage/${blog.featured_image}`}
+                            src={`${STORAGE_URL}/${blog.featured_image}`}
                             alt={blog.title}
                             className="w-full h-64 md:h-96 object-cover"
                             onError={(e) => {

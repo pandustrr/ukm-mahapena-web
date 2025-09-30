@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { API_URL } from "../../config/api"; 
 
 function ManajemenProker() {
   const [proker, setProker] = useState([]);
@@ -110,7 +111,7 @@ function ManajemenProker() {
     const fetchProker = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://127.0.0.1:8000/api/admin/proker");
+        const res = await axios.get(`${API_URL}/admin/proker`);
         const data = res.data.data?.data || res.data;
         setProker(data);
         setFilteredProker(data);
@@ -147,7 +148,7 @@ function ManajemenProker() {
     setIsDeleting(true);
     try {
       await axios.delete(
-        `http://127.0.0.1:8000/api/admin/proker/${deleteTarget.id}`,
+        `${API_URL}/admin/proker/${deleteTarget.id}`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,

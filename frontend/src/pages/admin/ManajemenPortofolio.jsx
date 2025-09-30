@@ -13,6 +13,7 @@ import {
     XCircle,
     Info
 } from "lucide-react";
+import  { API_URL, STORAGE_URL } from "../../config/api"; 
 
 // Pindahkan ConfirmationModal ke luar komponen utama
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = "warning", confirmText, cancelText, isLoading }) => {
@@ -127,7 +128,7 @@ function ManajemenPortofolio() {
     // Ambil data portofolio dari backend
     const fetchData = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/api/admin/portofolio", {
+            const res = await axios.get(`${API_URL}/admin/portofolio`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setPortofolios(res.data);
@@ -192,7 +193,7 @@ function ManajemenPortofolio() {
             if (editingId) {
                 // update
                 await axios.post(
-                    `http://localhost:8000/api/admin/portofolio/${editingId}?_method=PUT`,
+                    `${API_URL}/admin/portofolio/${editingId}?_method=PUT`,
                     form,
                     {
                         headers: {
@@ -204,7 +205,7 @@ function ManajemenPortofolio() {
                 alert("Portofolio berhasil diperbarui");
             } else {
                 // create
-                await axios.post("http://localhost:8000/api/admin/portofolio", form, {
+                await axios.post(`${API_URL}/admin/portofolio`, form, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data",
@@ -239,7 +240,7 @@ function ManajemenPortofolio() {
 
         // Set preview image dari data yang ada
         if (item.gambar) {
-            setPreviewImage(`http://localhost:8000/storage/${item.gambar}`);
+            setPreviewImage(`${STORAGE_URL}/${item.gambar}`);
         } else {
             setPreviewImage(null);
         }
@@ -259,7 +260,7 @@ function ManajemenPortofolio() {
     const confirmDelete = async () => {
         setIsDeleting(true);
         try {
-            await axios.delete(`http://localhost:8000/api/admin/portofolio/${deleteTarget.id}`, {
+            await axios.delete(`${API_URL}/admin/portofolio/${deleteTarget.id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             alert("Portofolio berhasil dihapus");
@@ -463,7 +464,7 @@ function ManajemenPortofolio() {
                                                 {item.gambar ? (
                                                     <div className="flex justify-center">
                                                         <img
-                                                            src={`http://localhost:8000/storage/${item.gambar}`}
+                                                            src={`${STORAGE_URL}/${item.gambar}`}
                                                             alt={item.judul}
                                                             className="h-16 w-16 object-cover rounded-lg border border-gray-200"
                                                         />

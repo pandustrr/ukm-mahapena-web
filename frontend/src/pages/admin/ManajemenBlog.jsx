@@ -21,6 +21,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../config/api"; 
 
 // Confirmation Modal Component
 const ConfirmationModal = ({
@@ -165,7 +166,7 @@ const ManajemenBlog = () => {
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://127.0.0.1:8000/api/admin/blogs", {
+      const res = await axios.get(`${API_URL}/admin/blogs`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = res.data.data?.data || res.data;
@@ -180,7 +181,7 @@ const ManajemenBlog = () => {
   const fetchCategories = async () => {
     try {
       const res = await axios.get(
-        "http://127.0.0.1:8000/api/admin/blog-categories",
+        `${API_URL}/admin/blog-categories`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -233,7 +234,7 @@ const ManajemenBlog = () => {
     try {
       if (formCategory.id) {
         await axios.put(
-          `http://localhost:8000/api/admin/blog-categories/${formCategory.id}`,
+          `${API_URL}/admin/blog-categories/${formCategory.id}`,
           { name: formCategory.name, status: formCategory.status },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -241,7 +242,7 @@ const ManajemenBlog = () => {
         resetCategory();
       } else {
         await axios.post(
-          "http://localhost:8000/api/admin/blog-categories",
+          `${API_URL}/admin/blog-categories`,
           { name: formCategory.name, status: formCategory.status },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -280,7 +281,7 @@ const ManajemenBlog = () => {
     try {
       if (deleteTarget.type === "blog") {
         await axios.delete(
-          `http://localhost:8000/api/admin/blogs/${deleteTarget.id}`,
+          `${API_URL}/admin/blogs/${deleteTarget.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -289,7 +290,7 @@ const ManajemenBlog = () => {
         fetchBlogs();
       } else {
         await axios.delete(
-          `http://localhost:8000/api/admin/blog-categories/${deleteTarget.id}`,
+          `${API_URL}/admin/blog-categories/${deleteTarget.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

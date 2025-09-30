@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Upload } from "lucide-react";
+import {API_URL} from "../../config/api"; 
 
 function CreateProker() {
   const [nama, setNama] = useState("");
@@ -65,7 +66,7 @@ function CreateProker() {
       }
 
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/admin/proker",
+        `${API_URL}/admin/proker`,
         formData,
         {
           headers: {

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Editor } from "@tinymce/tinymce-react";
+import { API_URL } from "../../config/api"; 
 
 import "tinymce/tinymce"; // core
 import "tinymce/icons/default";
@@ -76,7 +77,7 @@ function CreateBlog() {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/admin/blog-categories")
+      .get(`${API_URL}/admin/blog-categories`)
       .then((res) => setCategories(res.data.data || res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -111,7 +112,7 @@ function CreateBlog() {
       formData.append("meta_description", createExcerpt(content, 20));
 
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/admin/blogs",
+        `${API_URL}/admin/blogs`,
         formData,
         {
           headers: {

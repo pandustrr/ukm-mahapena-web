@@ -15,6 +15,7 @@ import {
     Info,
     Image as ImageIcon
 } from "lucide-react";
+import { API_URL, STORAGE_URL } from "../../config/api"; 
 
 // Pindahkan ConfirmationModal ke luar komponen utama
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = "warning", confirmText, cancelText, isLoading }) => {
@@ -147,7 +148,7 @@ function ManajemenMerchandise() {
     // ====== FETCH DATA ======
     const fetchMerchandises = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/api/admin/merchandises", {
+            const res = await axios.get(`${API_URL}/admin/merchandises`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setMerchandises(res.data);
@@ -159,7 +160,7 @@ function ManajemenMerchandise() {
 
     const fetchCategories = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/api/admin/categories", {
+            const res = await axios.get(`${API_URL}/admin/categories`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setCategories(res.data);
@@ -267,7 +268,7 @@ function ManajemenMerchandise() {
 
             if (formMerchandise.id) {
                 await axios.post(
-                    `http://localhost:8000/api/admin/merchandises/${formMerchandise.id}?_method=PUT`,
+                    `${API_URL}/admin/merchandises/${formMerchandise.id}?_method=PUT`,
                     formData,
                     {
                         headers: {
@@ -278,7 +279,7 @@ function ManajemenMerchandise() {
                 );
                 alert("Merchandise berhasil diperbarui");
             } else {
-                await axios.post("http://localhost:8000/api/admin/merchandises", formData, {
+                await axios.post(`${API_URL}/admin/merchandises`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data'
@@ -316,7 +317,7 @@ function ManajemenMerchandise() {
             colors: merchandise.colors || [],
             image: null,
             imagePreview: merchandise.image
-                ? `http://localhost:8000/storage/${merchandise.image}`
+                ? `${STORAGE_URL}/${merchandise.image}`
                 : ""
         });
 
@@ -345,7 +346,7 @@ function ManajemenMerchandise() {
             if (formCategory.id) {
                 // Update kategori
                 await axios.put(
-                    `http://localhost:8000/api/admin/categories/${formCategory.id}`,
+                    `${API_URL}/admin/categories/${formCategory.id}`,
                     { name: formCategory.name },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -353,7 +354,7 @@ function ManajemenMerchandise() {
                 resetCategoryForm();
             } else {
                 // Tambah kategori baru
-                await axios.post("http://localhost:8000/api/admin/categories",
+                await axios.post(`${API_URL}/admin/categories`,
                     { name: formCategory.name },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -418,13 +419,13 @@ function ManajemenMerchandise() {
         setIsDeleting(true);
         try {
             if (deleteTarget.type === 'merchandise') {
-                await axios.delete(`http://localhost:8000/api/admin/merchandises/${deleteTarget.id}`, {
+                await axios.delete(`${API_URL}/admin/merchandises/${deleteTarget.id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert("Merchandise berhasil dihapus");
                 fetchMerchandises();
             } else {
-                await axios.delete(`http://localhost:8000/api/admin/categories/${deleteTarget.id}`, {
+                await axios.delete(`${API_URL}/admin/categories/${deleteTarget.id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 alert("Kategori berhasil dihapus");
@@ -880,7 +881,7 @@ function ManajemenMerchandise() {
                                                 <td className="px-4 py-3">
                                                     {m.image ? (
                                                         <img
-                                                            src={`http://localhost:8000/storage/${m.image}`}
+                                                            src={`${STORAGE_URL}/${m.image}`}
                                                             alt={m.name}
                                                             className="w-12 h-12 object-cover rounded"
                                                             onError={(e) => {

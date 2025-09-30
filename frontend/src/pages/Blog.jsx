@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Loader } from "lucide-react";
 import { Link } from "react-router-dom";
+import { API_URL, STORAGE_URL } from "../config/api"; 
 
 const Blog = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -34,7 +35,7 @@ const Blog = () => {
       try {
         setLoading(true);
 
-        const res = await axios.get("http://localhost:8000/api/blogs");
+        const res = await axios.get(`${API_URL}/blogs`);
 
         // asumsi API kamu return { data: [...] }
         const payload = res.data;
@@ -178,7 +179,7 @@ const Blog = () => {
                     <div className="relative h-32 sm:h-40 md:h-44 lg:h-48 overflow-hidden bg-gradient-to-br from-[#3674B5]/10 to-[#A1E3F9]/20">
                       {article.featured_image ? (
                         <img
-                          src={`http://localhost:8000/storage/${article.featured_image}`}
+                          src={`${STORAGE_URL}/${article.featured_image}`}
                           alt={article.title}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           onError={(e) => {

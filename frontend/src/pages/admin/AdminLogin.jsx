@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import API_URL from "../../config/api"; 
+import {API_URL} from "../../config/api"; 
 
 export default function AdminLogin() {
     const [username, setUsername] = useState("");

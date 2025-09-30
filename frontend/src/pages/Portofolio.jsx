@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL, STORAGE_URL } from "../config/api";
 
 const Portofolio = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -29,7 +30,7 @@ const Portofolio = () => {
   // Ambil data prestasi dari backend
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/portofolio")
+      .get(`${API_URL}/portofolio`)
       .then((res) => setPrestasi(res.data))
       .catch((err) => console.error("Gagal ambil data portofolio:", err));
   }, []);
@@ -133,7 +134,7 @@ const Portofolio = () => {
                       {item.gambar ? (
                         <div className="relative w-full aspect-[4/3] rounded-t-2xl overflow-hidden">
                           <img
-                            src={`http://localhost:8000/storage/${item.gambar}`}
+                            src={`${STORAGE_URL}/${item.gambar}`}
                             alt={item.judul}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                             onError={(e) => {
