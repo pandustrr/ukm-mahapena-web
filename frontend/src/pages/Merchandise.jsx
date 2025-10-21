@@ -117,7 +117,7 @@ const Merchandise = () => {
         (formData.catatan ? `Catatan: ${formData.catatan}\n` : "");
 
       const encodedMessage = encodeURIComponent(message);
-      const phoneNumber = "6281556509656";
+      const phoneNumber = "6285133237793";
       window.open(
         `https://wa.me/${phoneNumber}?text=${encodedMessage}`,
         "_blank"

@@ -180,7 +180,7 @@ const LogoModal = ({ isOpen, onClose }) => {
           <div className="text-center">
             <h3 className="text-2xl font-bold mb-2">Lambang MAHAPENA</h3>
             <p className="text-white/90">
-              Mahasiswa Pecinta Alam Fakultas Ekonomi Universitas Jember
+              Mahasiswa Pencinta Alam Fakultas Ekonomi Universitas Jember
             </p>
           </div>
         </div>
@@ -254,7 +254,7 @@ const LogoModal = ({ isOpen, onClose }) => {
               {/* Kode Etik Section */}
               <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-4">
                 <h5 className="font-semibold text-gray-800 dark:text-white mb-3">
-                  Kode Etik Pecinta Alam Indonesia
+                  Kode Etik Pencinta Alam Indonesia
                 </h5>
                 <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                   <li className="flex items-start">
@@ -272,7 +272,7 @@ const LogoModal = ({ isOpen, onClose }) => {
                   </li>
                   <li className="flex items-start">
                     <span className="w-2 h-2 bg-[#5682B1] rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Berusaha mempererat tali persaudaraan sesama pecinta alam
+                    Berusaha mempererat tali persaudaraan sesama pencinta alam
                   </li>
                   <li className="flex items-start">
                     <span className="w-2 h-2 bg-[#5682B1] rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -460,14 +460,14 @@ const LogoModal = ({ isOpen, onClose }) => {
                   <p className="mb-2">
                     <strong>MAHAPENA</strong> merupakan singkatan dari{" "}
                     <strong>
-                      Mahasiswa Pecinta Alam Fakultas Ekonomi Universitas Jember
+                      Mahasiswa Pencinta Alam Fakultas Ekonomi Universitas Jember
                     </strong>
                   </p>
                   <p>
                     Didirikan khusus untuk Mahasiswa Fakultas Ekonomi
                     Universitas Jember pada <strong>14 Maret 1977</strong>,
                     dengan komitmen untuk mengembangkan karakter mahasiswa
-                    melalui kegiatan pecinta alam.
+                    melalui kegiatan pencinta alam.
                   </p>
                 </div>
               </div>
@@ -730,9 +730,9 @@ const Profil = () => {
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-xl1 pl-6">
                     Mahasiswa-FEB Unej didirikan pada tanggal 14 Maret 1977 yang
                     diprakarsai M. Istiqlal (M. 010001) dan kawan kawan. Latar
-                    belakang pendirian Mahapena adalah mewadahai bakat minat
+                    belakang pendirian Mahapena adalah mewadahi bakat minat
                     mahasiwa FEB Unej yang pada waktu itu memiliki hobi
-                    jalan-jalan dan kepecintaalaman yang tinggi.
+                    jalan-jalan dan kepencintaalaman yang tinggi.
                   </p>
                 </div>
 
@@ -741,7 +741,7 @@ const Profil = () => {
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-xl1 pl-6">
                     Dengan kepercayaan tinggi, keberanian, dan semangat sebagai
                     ujung tombaknya, Mahapena terus berkontribusi menciptakan
-                    mahasiswa yang akademis, pecinta lingkungan, dan terus
+                    mahasiswa yang akademis, pencinta lingkungan, dan terus
                     berkontribusi terhadap masyarakat sekitar. Melalui program
                     dan kegiatannya dirancang untuk mengasah kemampuan soft
                     skill dan hard skill yang dibutuhkan di dunia profesional
@@ -945,7 +945,7 @@ const Profil = () => {
 
                   <div className="relative z-10">
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
-                      Terbinanya mahasiswa akademis, pecinta, pengabdi kepada
+                      Terbinanya mahasiswa akademis, pencinta, pengabdi kepada
                       bumi Indonesia beserta lingkungannya untuk lebih
                       mendekatkan diri kepada Penciptanya.
                     </p>

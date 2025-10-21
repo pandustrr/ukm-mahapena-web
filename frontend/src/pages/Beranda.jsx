@@ -526,7 +526,7 @@ const Beranda = ({ setCurrentPage }) => {
             </div>
 
             <form
-              action="https://formsubmit.co/slimekenyal123@gmail.com"
+              action="https://formsubmit.co/mahapena.febunej@gmail.com"
               method="POST"
               className="space-y-6 relative z-10"
             >
