@@ -96,22 +96,30 @@ public function dashboard(Request $request)
 
         $request->validate([
             'username' => 'required|string|min:3|unique:admins,username,' . $admin->id,
-            'password' => 'nullable|string|min:6|confirmed',
+            'old_password' => 'nullable|string',
+            'new_password' => 'nullable|string|min:6',
         ]);
 
+        // Update username
         $admin->username = $request->username;
 
-        if ($request->filled('password')) {
-            $admin->password = Hash::make($request->password);
+        // Jika user mengisi password baru
+        if ($request->filled('new_password')) {
+            // Pastikan password lama benar dulu
+            if (!Hash::check($request->old_password, $admin->password)) {
+                return response()->json(['message' => 'Password lama salah'], 400);
+            }
+
+            $admin->password = Hash::make($request->new_password);
         }
 
-        // Hapus token lama supaya otomatis logout
+        // Hapus token lama (agar logout otomatis)
         $admin->api_token = null;
         $admin->save();
 
         return response()->json([
             'message' => 'Profil berhasil diperbarui, silakan login kembali',
         ], 200);
-    }
+}
 
 }
